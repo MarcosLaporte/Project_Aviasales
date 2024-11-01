@@ -20,64 +20,42 @@ public abstract class InputService {
     }
 
     /**
-     * Reads an integer from the user within a specified range. If input is invalid, displays an error message and prompts again.
+     * Reads a Number from the user within a specified range. If input is invalid, displays an error message and prompts again.
      *
      * @param msg      the prompt message displayed to the user.
      * @param errorMsg the error message displayed upon invalid input.
-     * @param min      the minimum allowable integer value.
-     * @param max      the maximum allowable integer value.
-     * @return the validated integer input within the specified range.
+     * @param min      the minimum allowable Number value.
+     * @param max      the maximum allowable Number value.
+     * @return the validated Number input within the specified range.
      */
-    public static int readInt(String msg, String errorMsg, int min, int max) {
+    public static <T extends Number> T readNumber(String msg,  String errorMsg, T min, T max, Class<T> clazz){
         LoggerService.print(msg);
-        int inputNumber = min;
+        T inputNumber = min;
         boolean isValid = false;
-
-        while (!isValid) {
+        do {
+            LoggerService.print(msg);
             try {
-                inputNumber = SCANNER.nextInt();
-                Validate.inclusiveBetween(min, max, inputNumber);
-
+                inputNumber = readAnswer(clazz);
+                Validate.inclusiveBetween(min.doubleValue(), max.doubleValue(), inputNumber.doubleValue());
                 isValid = true;
-            } catch (Exception e) {
+            }catch (Exception e){
                 LoggerService.print(errorMsg);
-            } finally {
+                SCANNER.nextLine();
+            }finally {
                 SCANNER.nextLine(); //Cleans buffer
             }
-        }
-
+        } while (!isValid);
         return inputNumber;
     }
 
-    /**
-     * Reads a floating-point number from the user within a specified range. If input is invalid, displays an error message and prompts again.
-     *
-     * @param msg      the prompt message displayed to the user.
-     * @param errorMsg the error message displayed upon invalid input.
-     * @param min      the minimum allowable float value.
-     * @param max      the maximum allowable float value.
-     * @return the validated float input within the specified range.
-     */
-    public static float readFloat(String msg, String errorMsg, float min, float max) {
-        LoggerService.print(msg);
-        float inputNumber = min;
-        boolean isValid = false;
-
-        while (!isValid) {
-            try {
-                inputNumber = SCANNER.nextFloat();
-                Validate.inclusiveBetween(min, max, inputNumber);
-
-                isValid = true;
-            } catch (Exception e) {
-                LoggerService.print(errorMsg);
-                SCANNER.nextLine();
-            } finally {
-                SCANNER.nextLine(); //Cleans buffer
-            }
-        }
-
-        return inputNumber;
+    public static <T extends Number> T readAnswer(Class<T> clazz){
+        return switch (clazz.getSimpleName()) {
+            case "Integer" -> clazz.cast(SCANNER.nextInt());
+            case "Float" -> clazz.cast(SCANNER.nextFloat());
+            case "Long" -> clazz.cast(SCANNER.nextLong());
+            case "Double" -> clazz.cast(SCANNER.nextDouble());
+            default -> throw new IllegalArgumentException("Unsupported type: " + clazz);
+        };
     }
 
     /**
@@ -99,6 +77,8 @@ public abstract class InputService {
         SCANNER.nextLine(); //Cleans buffer
         return inputChar;
     }
+
+
 
     /**
      * Reads a yes or no confirmation from the user, allowing only 'Y' or 'N' as valid inputs.
@@ -150,7 +130,7 @@ public abstract class InputService {
      * @param availableValues the array of allowed strings.
      * @return the validated string input.
      */
-    public static String readStringInValues(String msg, String errorMsg, String[] availableValues) {
+    public static String readString(String msg, String errorMsg, String[] availableValues) {
         LoggerService.print(msg);
         String inputStr = SCANNER.next();
         while (!ArrayUtils.contains(availableValues, inputStr)) {
@@ -171,7 +151,7 @@ public abstract class InputService {
      * @param condition a predicate defining the validation condition for the input.
      * @return the validated string input.
      */
-    public static String readStringFollowsCondition(String msg, String errorMsg, Predicate<String> condition) {
+    public static String readString(String msg, String errorMsg, Predicate<String> condition) {
         LoggerService.print(msg);
         String inputStr;
 
@@ -213,10 +193,11 @@ public abstract class InputService {
         }
 
         LoggerService.println(sb);
-        return InputService.readInt(
+        return InputService.readNumber(
                 selectMessage,
                 "Invalid value. Try again: ",
-                min, items.size()
+                min, items.size(),
+                Integer.class
         ) - 1;
     }
 
@@ -236,22 +217,25 @@ public abstract class InputService {
 
         while (!isValid) {
             try {
-                year = readInt(
+                year = readNumber(
                         "Enter year: ",
                         "Invalid year. Try again: ",
-                        LocalDate.MIN.getYear(), LocalDate.MAX.getYear()
+                        LocalDate.MIN.getYear(), LocalDate.MAX.getYear(),
+                        Integer.class
                 );
 
-                month = readInt(
+                month = readNumber(
                         "Enter month (1-12): ",
                         "Invalid month. Try again: ",
-                        1, 12
+                        1, 12,
+                        Integer.class
                 );
 
-                day = readInt(
+                day = readNumber(
                         "Enter day: ",
                         "Invalid day. Try again: ",
-                        1, 31
+                        1, 31,
+                        Integer.class
                 );
 
                 date = LocalDate.of(year, month, day);
