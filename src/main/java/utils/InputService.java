@@ -28,28 +28,28 @@ public abstract class InputService {
      * @param max      the maximum allowable Number value.
      * @return the validated Number input within the specified range.
      */
-    public static <T extends Number> T readNumber(String msg,  String errorMsg, T min, T max, Class<T> clazz){
+    public static <T extends Number> T readNumber(String msg, String errorMsg, T min, T max, Class<T> clazz) {
         LoggerService.print(msg);
         T inputNumber = min;
         boolean isValid = false;
         do {
-            LoggerService.print(msg);
             try {
                 inputNumber = readAnswer(clazz);
                 Validate.inclusiveBetween(min.doubleValue(), max.doubleValue(), inputNumber.doubleValue());
                 isValid = true;
-            }catch (Exception e){
+            } catch (Exception e) {
                 LoggerService.print(errorMsg);
-                SCANNER.nextLine();
-            }finally {
+            } finally {
                 SCANNER.nextLine(); //Cleans buffer
             }
         } while (!isValid);
         return inputNumber;
     }
 
-    public static <T extends Number> T readAnswer(Class<T> clazz){
+    public static <T extends Number> T readAnswer(Class<T> clazz) {
         return switch (clazz.getSimpleName()) {
+            case "Byte" -> clazz.cast(SCANNER.nextByte());
+            case "Short" -> clazz.cast(SCANNER.nextShort());
             case "Integer" -> clazz.cast(SCANNER.nextInt());
             case "Float" -> clazz.cast(SCANNER.nextFloat());
             case "Long" -> clazz.cast(SCANNER.nextLong());
@@ -77,7 +77,6 @@ public abstract class InputService {
         SCANNER.nextLine(); //Cleans buffer
         return inputChar;
     }
-
 
 
     /**
