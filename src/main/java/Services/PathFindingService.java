@@ -10,7 +10,7 @@ public class PathFindingService {
      * there is no direct path
      * example:
      * • = there is no direct route between destinations
-     * A | B | C | D | E
+     *   A | B | C | D | E
      * A 0 | 4 | • | 5 | •
      * B • | 0 | 1 | • | 6
      * C 2 | • | 0 | 3 | •

@@ -1,4 +1,5 @@
 import Services.PathFindingService;
+import utils.AivenDatabaseConnection;
 import utils.Global;
 
 import java.util.HashMap;
@@ -20,5 +21,7 @@ public class Main {
             System.out.println(key);
             value.forEach((l, d) -> System.out.println(l + " " + d));
         });
+
+        AivenDatabaseConnection.testConnection();
     }
 }

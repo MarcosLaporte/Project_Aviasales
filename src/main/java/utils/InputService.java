@@ -14,11 +14,9 @@ import java.util.function.Predicate;
 
 public abstract class InputService {
     private static final Scanner SCANNER = new Scanner(System.in);
-
     static {
         SCANNER.useLocale(Locale.US);
     }
-
     /**
      * Reads a Number from the user within a specified range. If input is invalid, displays an error message and prompts again.
      *
@@ -47,7 +45,6 @@ public abstract class InputService {
         } while (!isValid);
         return inputNumber;
     }
-
     public static <T extends Number> T readAnswer(Class<T> clazz){
         return switch (clazz.getSimpleName()) {
             case "Integer" -> clazz.cast(SCANNER.nextInt());
@@ -57,7 +54,6 @@ public abstract class InputService {
             default -> throw new IllegalArgumentException("Unsupported type: " + clazz);
         };
     }
-
     /**
      * Reads a character from the user that must be one of the specified allowed values. If input is invalid, displays an error message and prompts again.
      *
@@ -77,9 +73,6 @@ public abstract class InputService {
         SCANNER.nextLine(); //Cleans buffer
         return inputChar;
     }
-
-
-
     /**
      * Reads a yes or no confirmation from the user, allowing only 'Y' or 'N' as valid inputs.
      *
@@ -93,7 +86,6 @@ public abstract class InputService {
                 new char[]{'Y', 'N'}
         ) == 'Y';
     }
-
     /**
      * Reads a string from the user that must fall within specified length constraints. If input is invalid, displays an error message and prompts again.
      *
@@ -121,7 +113,6 @@ public abstract class InputService {
 
         return inputStr;
     }
-
     /**
      * Reads a string from the user that must match one of the specified allowed values. If input is invalid, displays an error message and prompts again.
      *
@@ -142,7 +133,6 @@ public abstract class InputService {
 
         return inputStr;
     }
-
     /**
      * Reads a string from the user that must satisfy a specified condition. If input is invalid, displays an error message and prompts again.
      *
@@ -200,7 +190,6 @@ public abstract class InputService {
                 Integer.class
         ) - 1;
     }
-
     /**
      * Reads a date from the user by prompting for year, month, and day, or allows using the current date. Validates and returns the input date.
      *
@@ -245,7 +234,6 @@ public abstract class InputService {
                 LoggerService.println(String.format("'%d-%d-%d' Invalid date. Please try again.", year, month, day));
             }
         }
-
         return date;
     }
 }
