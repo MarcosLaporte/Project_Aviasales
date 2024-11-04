@@ -18,7 +18,7 @@ public class AivenDatabaseConnection {
 
     private void loadProperties() {
         Properties properties = new Properties();
-        try (FileInputStream input = new FileInputStream("src/main/java/config.properties")) {
+        try (FileInputStream input = new FileInputStream("src/main/java/resources/config.properties")) {
             properties.load(input);
             url = properties.getProperty("database.url");
             user = properties.getProperty("database.user");
