@@ -1,18 +1,38 @@
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Properties;
 
 public class AivenDatabaseConnection {
-    private static final String URL = "jdbc:mysql://aviasales-aviasales-00bd.k.aivencloud.com:10458/aviasales?sslmode=require";
-    private static final String USER = "avnadmin";
-    private static final String PASSWORD = ""; //put the password here :)
 
-    // hice este metodo para testear
+    private String url;
+    private String user;
+    private String password;
+
+    public AivenDatabaseConnection() {
+        loadProperties();
+    }
+
+    private void loadProperties() {
+        Properties properties = new Properties();
+        try (FileInputStream input = new FileInputStream("src/main/java/config.properties")) {
+            properties.load(input);
+            url = properties.getProperty("database.url");
+            user = properties.getProperty("database.user");
+            password = properties.getProperty("database.password");
+        } catch (IOException e) {
+            System.err.println("Error loading properties: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    // Método para testear la conexión
     public void testConnection() {
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
             System.out.println("Aiven worked.");
-
 
             String query = "SELECT id, name FROM airports";
             try (Statement statement = connection.createStatement()) {
@@ -31,6 +51,4 @@ public class AivenDatabaseConnection {
             e.printStackTrace();
         }
     }
-
-
 }
