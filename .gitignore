@@ -37,4 +37,5 @@ build/
 ### Mac OS ###
 .DS_Store
 
-AivenDatabaseConnection.java
+src/main/java/config.properties
+config.properties
