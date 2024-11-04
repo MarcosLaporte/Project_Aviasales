@@ -6,8 +6,12 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import entities.annotations.Column;
 import entities.annotations.Range;
 
-@JsonPropertyOrder({"idFrom", "idTo", "airlineId", "km", "price"})
+@JsonPropertyOrder({"id", "idFrom", "idTo", "airlineId", "km", "price"})
 public class Route implements Entity {
+    @Column(name="id", autoIncrement = true)
+    @Range(min = 1001)
+    private int id;
+
     @Column(name = "id_from")
     @Range(min = 101)
     private int idFrom;
@@ -31,12 +35,23 @@ public class Route implements Entity {
     private Route() {
     }
 
-    public Route(int idFrom, int idTo, int airlineId, int km, double price) {
+    public Route(int id, int idFrom, int idTo, int airlineId, int km, double price) {
+        this.id = id;
         this.idFrom = idFrom;
         this.idTo = idTo;
         this.airlineId = airlineId;
         this.km = km;
         this.price = price;
+    }
+
+    @JsonGetter("id")
+    public int getId() {
+        return id;
+    }
+
+    @JsonSetter("id")
+    public void setId(int id) {
+        this.id = id;
     }
 
     @JsonGetter("idFrom")

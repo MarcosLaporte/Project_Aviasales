@@ -3,15 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="entities.Route">
-    <resultMap id="routeResultMap" type="entities.Route">
-        <result property="idFrom" column="id_from"/>
-        <result property="idTo" column="id_to"/>
-        <result property="airlineId" column="airline_id"/>
+<mapper namespace="entities.Passenger">
+    <resultMap id="passengerResultMap" type="entities.Passenger">
+        <result property="fullName" column="full_name"/>
     </resultMap>
 
-    <select id="get" parameterType="map" resultType="entities.Route" resultMap="routeResultMap">
-        SELECT * FROM routes
+    <select id="get" parameterType="map" resultType="entities.Passenger" resultMap="passengerResultMap">
+        SELECT * FROM passengers
         <where>
             <foreach collection="_parameter" index="key" item="value" separator=" AND ">
                 ${key} = #{value}
@@ -19,13 +17,13 @@
         </where>;
     </select>
 
-    <insert id="create" parameterType="entities.Route">
-        INSERT INTO routes (id_from, id_to, airline_id, km, price)
-        VALUES (#{idFrom}, #{idTo}, #{airlineId}, #{km}, #{price});
+    <insert id="create" parameterType="entities.Passenger">
+        INSERT INTO passengers (full_name)
+        VALUES (#{fullName});
     </insert>
 
     <update id="update" parameterType="map">
-        UPDATE routes
+        UPDATE passengers
         <set>
             <foreach collection="values" index="key" item="value" separator=",">
                 ${key} = #{value}
@@ -39,7 +37,7 @@
     </update>
 
     <delete id="delete" parameterType="map">
-        DELETE FROM routes
+        DELETE FROM passengers
         <where>
             <foreach collection="_parameter" index="key" item="value" separator=" AND ">
                 ${key} = #{value}
