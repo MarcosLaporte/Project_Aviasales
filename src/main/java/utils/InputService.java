@@ -17,6 +17,7 @@ public abstract class InputService {
     static {
         SCANNER.useLocale(Locale.US);
     }
+
     /**
      * Reads a Number from the user within a specified range. If input is invalid, displays an error message and prompts again.
      *
@@ -26,27 +27,29 @@ public abstract class InputService {
      * @param max      the maximum allowable Number value.
      * @return the validated Number input within the specified range.
      */
-    public static <T extends Number> T readNumber(String msg,  String errorMsg, T min, T max, Class<T> clazz){
+  
+    public static <T extends Number> T readNumber(String msg, String errorMsg, T min, T max, Class<T> clazz) {
         LoggerService.print(msg);
         T inputNumber = min;
         boolean isValid = false;
         do {
-            LoggerService.print(msg);
             try {
                 inputNumber = readAnswer(clazz);
                 Validate.inclusiveBetween(min.doubleValue(), max.doubleValue(), inputNumber.doubleValue());
                 isValid = true;
-            }catch (Exception e){
+            } catch (Exception e) {
                 LoggerService.print(errorMsg);
-                SCANNER.nextLine();
-            }finally {
+            } finally {
                 SCANNER.nextLine(); //Cleans buffer
             }
         } while (!isValid);
         return inputNumber;
     }
-    public static <T extends Number> T readAnswer(Class<T> clazz){
+
+    public static <T extends Number> T readAnswer(Class<T> clazz) {
         return switch (clazz.getSimpleName()) {
+            case "Byte" -> clazz.cast(SCANNER.nextByte());
+            case "Short" -> clazz.cast(SCANNER.nextShort());
             case "Integer" -> clazz.cast(SCANNER.nextInt());
             case "Float" -> clazz.cast(SCANNER.nextFloat());
             case "Long" -> clazz.cast(SCANNER.nextLong());
@@ -54,6 +57,7 @@ public abstract class InputService {
             default -> throw new IllegalArgumentException("Unsupported type: " + clazz);
         };
     }
+  
     /**
      * Reads a character from the user that must be one of the specified allowed values. If input is invalid, displays an error message and prompts again.
      *
@@ -73,6 +77,7 @@ public abstract class InputService {
         SCANNER.nextLine(); //Cleans buffer
         return inputChar;
     }
+
     /**
      * Reads a yes or no confirmation from the user, allowing only 'Y' or 'N' as valid inputs.
      *
@@ -86,6 +91,7 @@ public abstract class InputService {
                 new char[]{'Y', 'N'}
         ) == 'Y';
     }
+  
     /**
      * Reads a string from the user that must fall within specified length constraints. If input is invalid, displays an error message and prompts again.
      *
@@ -97,7 +103,6 @@ public abstract class InputService {
     public static String readString(String msg, int minLength, int maxLength) {
         LoggerService.print(msg);
         String inputStr;
-
         do {
             try {
                 inputStr = SCANNER.nextLine();
@@ -113,6 +118,7 @@ public abstract class InputService {
 
         return inputStr;
     }
+  
     /**
      * Reads a string from the user that must match one of the specified allowed values. If input is invalid, displays an error message and prompts again.
      *
@@ -133,6 +139,7 @@ public abstract class InputService {
 
         return inputStr;
     }
+  
     /**
      * Reads a string from the user that must satisfy a specified condition. If input is invalid, displays an error message and prompts again.
      *
@@ -190,6 +197,7 @@ public abstract class InputService {
                 Integer.class
         ) - 1;
     }
+  
     /**
      * Reads a date from the user by prompting for year, month, and day, or allows using the current date. Validates and returns the input date.
      *
