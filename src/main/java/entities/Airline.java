@@ -29,6 +29,10 @@ public class Airline implements Entity {
         this.name = name;
     }
 
+    private Airline(Integer id, String name) {
+        this(id.intValue(), name);
+    }
+
     @JsonGetter("id")
     public int getId() {
         return id;
@@ -47,5 +51,10 @@ public class Airline implements Entity {
     @JsonSetter("name")
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("ID%d - %s", this.id, this.name);
     }
 }
