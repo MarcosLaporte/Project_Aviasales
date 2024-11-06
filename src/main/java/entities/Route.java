@@ -6,8 +6,12 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import entities.annotations.Column;
 import entities.annotations.Range;
 
-@JsonPropertyOrder({"idFrom", "idTo", "airlineId", "km", "price"})
+@JsonPropertyOrder({"id", "idFrom", "idTo", "airlineId", "km", "price"})
 public class Route implements Entity {
+    @Column(name="id", autoIncrement = true)
+    @Range(min = 1001)
+    private int id;
+
     @Column(name = "id_from")
     @Range(min = 101)
     private int idFrom;
@@ -31,12 +35,39 @@ public class Route implements Entity {
     private Route() {
     }
 
+    public Route(int id, int idFrom, int idTo, int airlineId, int km, double price) {
+        this.id = id;
+        this.idFrom = idFrom;
+        this.idTo = idTo;
+        this.airlineId = airlineId;
+        this.km = km;
+        this.price = price;
+    }
+
     public Route(int idFrom, int idTo, int airlineId, int km, double price) {
         this.idFrom = idFrom;
         this.idTo = idTo;
         this.airlineId = airlineId;
         this.km = km;
         this.price = price;
+    }
+
+    private Route(Integer id, Integer idFrom, Integer idTo, Integer airlineId, Integer km, Double price) {
+        this(id.intValue(), idFrom.intValue(), idTo.intValue(), airlineId.intValue(), km.intValue(), price.doubleValue());
+    }
+
+    private Route(Integer idFrom, Integer idTo, Integer airlineId, Integer km, Double price) {
+        this(idFrom.intValue(), idTo.intValue(), airlineId.intValue(), km.intValue(), price.doubleValue());
+    }
+
+    @JsonGetter("id")
+    public int getId() {
+        return id;
+    }
+
+    @JsonSetter("id")
+    public void setId(int id) {
+        this.id = id;
     }
 
     @JsonGetter("idFrom")
@@ -87,5 +118,10 @@ public class Route implements Entity {
     @JsonSetter("price")
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d -> %d | %dkm $%.2f", this.idFrom, this.idTo, this.km, this.price);
     }
 }

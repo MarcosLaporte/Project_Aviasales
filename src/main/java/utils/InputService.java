@@ -14,7 +14,6 @@ import java.util.function.Predicate;
 
 public abstract class InputService {
     private static final Scanner SCANNER = new Scanner(System.in);
-
     static {
         SCANNER.useLocale(Locale.US);
     }
@@ -28,6 +27,7 @@ public abstract class InputService {
      * @param max      the maximum allowable Number value.
      * @return the validated Number utils.input within the specified range.
      */
+  
     public static <T extends Number> T readNumber(String msg, String errorMsg, T min, T max, Class<T> clazz) {
         LoggerService.print(msg);
         T inputNumber = min;
@@ -46,7 +46,7 @@ public abstract class InputService {
         return inputNumber;
     }
 
-    public static <T extends Number> T readAnswer(Class<T> clazz) {
+    public static <T extends Number> T readAnswer(Class<T> clazz) throws ClassCastException {
         return switch (clazz.getSimpleName()) {
             case "Byte" -> clazz.cast(SCANNER.nextByte());
             case "Short" -> clazz.cast(SCANNER.nextShort());
@@ -57,7 +57,7 @@ public abstract class InputService {
             default -> throw new IllegalArgumentException("Unsupported type: " + clazz);
         };
     }
-
+  
     /**
      * Reads a character from the user that must be one of the specified allowed values. If utils.input is invalid, displays an error message and prompts again.
      *
@@ -78,7 +78,6 @@ public abstract class InputService {
         return inputChar;
     }
 
-
     /**
      * Reads a yes or no confirmation from the user, allowing only 'Y' or 'N' as valid inputs.
      *
@@ -92,7 +91,7 @@ public abstract class InputService {
                 new char[]{'Y', 'N'}
         ) == 'Y';
     }
-
+  
     /**
      * Reads a string from the user that must fall within specified length constraints. If utils.input is invalid, displays an error message and prompts again.
      *
@@ -104,7 +103,6 @@ public abstract class InputService {
     public static String readString(String msg, int minLength, int maxLength) {
         LoggerService.print(msg);
         String inputStr;
-
         do {
             try {
                 inputStr = SCANNER.nextLine();
@@ -120,7 +118,7 @@ public abstract class InputService {
 
         return inputStr;
     }
-
+  
     /**
      * Reads a string from the user that must match one of the specified allowed values. If utils.input is invalid, displays an error message and prompts again.
      *
@@ -141,7 +139,7 @@ public abstract class InputService {
 
         return inputStr;
     }
-
+  
     /**
      * Reads a string from the user that must satisfy a specified condition. If utils.input is invalid, displays an error message and prompts again.
      *
@@ -178,11 +176,11 @@ public abstract class InputService {
      * @param cancelMessage the message for the cancellation option, or null if not applicable.
      * @return the index of the selected item in the list, or -1 if the cancel option is selected.
      */
-    public static int selectIndexFromList(String selectMessage, List<String> items, String cancelMessage) {
+    public static int selectIndexFromList(String selectMessage, List<?> items, String cancelMessage) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < items.size(); i++) {
             sb.append('\n').append(i + 1).append(". ");
-            sb.append(items.get(i));
+            sb.append(items.get(i).toString());
         }
 
         int min = 1;
@@ -199,7 +197,7 @@ public abstract class InputService {
                 Integer.class
         ) - 1;
     }
-
+  
     /**
      * Reads a date from the user by prompting for year, month, and day, or allows using the current date. Validates and returns the utils.input date.
      *
@@ -244,7 +242,6 @@ public abstract class InputService {
                 LoggerService.println(String.format("'%d-%d-%d' Invalid date. Please try again.", year, month, day));
             }
         }
-
         return date;
     }
 }
