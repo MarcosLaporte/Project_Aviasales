@@ -10,13 +10,28 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class RouteService {
 
     public static final int INF = Integer.MAX_VALUE / 2;
 
     public void start() {
-        printAllRoutes();
+        //printAllRoutes();
+        Scanner scanner = new Scanner(System.in);
+
+        // Show available airports and tells the user to choose 2
+
+        List<Airport> airports = getAirports();
+        showAirports(airports);
+
+        System.out.println("Enter the number of the starting airport:");
+        int startIndex = scanner.nextInt();
+
+        System.out.println("Enter the number of the destination airport:");
+        int endIndex = scanner.nextInt();
+
+        printRouteBetweenAirports(startIndex, endIndex, airports);
     }
 
     private void printAllRoutes() {
@@ -198,4 +213,47 @@ public class RouteService {
         }
         return List.of();
     }
+
+    ///implementing asking for starting airport and ending airport
+
+
+    /**
+     * Shows airport list
+     */
+    private void showAirports(List<Airport> airports) {
+        System.out.println("Available Airports:");
+        for (int i = 0; i < airports.size(); i++) {
+            System.out.println(i + ". " + airports.get(i).getName());
+        }
+    }
+
+    /**
+     * This should print the nearest route between airports
+     *
+     * @param startIndex start of the trip
+     * @param endIndex destination of the trip
+     * @param airports airport list
+     */
+    private void printRouteBetweenAirports(int startIndex, int endIndex, List<Airport> airports) {
+        List<Route> routes = getRoutes();
+        int[][] graph = makeGraph(airports, routes);
+        int V = graph.length;
+        int[][] parent;
+        List<List<List<Integer>>> paths = new ArrayList<>();
+
+        parent = initializeParentArray(graph, paths);
+        applyFloydWarshall(graph, parent, paths);
+
+        // here we get the shortest path from one to another
+        if (startIndex != endIndex && graph[startIndex][endIndex] < INF) {
+            System.out.println("Shortest path from " + airports.get(startIndex).getName() +
+                    " to " + airports.get(endIndex).getName() + ":");
+            paths.get(startIndex).get(endIndex).forEach(index ->
+                    System.out.print(airports.get(index).getName() + " -> "));
+            System.out.println(" (Distance: " + graph[startIndex][endIndex] + ")");
+        } else {
+            System.out.println("No available path between the selected airports.");
+        }
+    }
+
 }
