@@ -1,48 +1,92 @@
+import entities.Airline;
 import entities.Airport;
-import view.departures.SelectDepartureMenuHandler;
-import view.general.ListMenuHandler;
-import view.general.SelectionMenuView;
+import entities.Entity;
+import entities.Route;
+import org.apache.logging.log4j.Level;
+import services.MyBatis;
+import utils.EntityReflection;
+import utils.LoggerService;
+import view.ListMenuHandler;
+import view.SelectionMenuView;
 
-import java.util.Arrays;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
+    private enum Menu {
+        NEW_AIRLINE, NEW_AIRPORT, NEW_ROUTE, NEW_TRIP;
+
+        @Override
+        public String toString() {
+            return super.toString().replace('_', ' ');
+        }
+    }
+
     public static void main(String[] args) {
+        SelectionMenuView<Menu> view = new SelectionMenuView<>(List.of(Menu.values()))
+                .setElementConsumer((Menu e, Integer index) -> System.out.printf("%d. %s\n", index, e))
+                .setMenuMessage("Select an action to perform: ");
 
-        /*int[][] graph = {
-                {0, 4, Global.INF, 5, Global.INF},
-                {Global.INF, 0, 1, Global.INF, 6},
-                {2, Global.INF, 0, 3, Global.INF},
-                {Global.INF, Global.INF, 1, 0, 2},
-                {1, Global.INF, Global.INF, 4, 2}
-        };
+        ListMenuHandler<Menu> mainMenu = new ListMenuHandler<>(view)
+                .setLoop(true)
+                .setOptionConsumer((e, _) -> {
+                    switch (e) {
+                        case NEW_AIRLINE -> createEntity(Airline.class);
+                        case NEW_AIRPORT -> createEntity(Airport.class);
+                        case NEW_ROUTE -> createEntity(Route.class);
+                        case NEW_TRIP -> handleNewTrip();
+                    }
+                });
 
-        HashMap<Character, HashMap<Character, Integer>> distances = PathFindingService.shortestPath(graph, Global.INF);
+        System.out.println("Welcome to Aviasales!");
+        mainMenu.processMenuOption();
+    }
 
-        distances.forEach((key, value) -> {
-            System.out.println(key);
-            value.forEach((l, d) -> System.out.println(l + " " + d));
-        });
+    private static <T extends Entity> void createEntity(Class<T> clazz) {
+        EntityReflection<T> rs = new EntityReflection<>(clazz);
 
-        AivenDatabaseConnection.testConnection();*/
+        try (MyBatis<T> dao = new MyBatis<>(clazz)) {
+            if (dao.create(rs.readNewInstance(false)) > 0)
+                LoggerService.println(clazz.getSimpleName() + " created!");
+            else
+                LoggerService.println("No " + clazz.getSimpleName() + " was created.");
+        } catch (Exception e) {
+            LoggerService.log(Level.ERROR, e.getMessage() != null ? e.getMessage() : e.getClass().toString());
+        }
+    }
 
-        List<Airport> airports = Arrays.asList(
-                new Airport(1, "A"),
-                new Airport(2, "B"),
-                new Airport(3, "C"));
+    private static void handleNewTrip() {
+        try (
+                MyBatis<Airport> airportDao = new MyBatis<>(Airport.class);
+                MyBatis<Route> routeDao = new MyBatis<>(Route.class)
+        ) {
+            List<Airport> airports = airportDao.get(Map.of());
 
-        ListMenuHandler<Airport> menu = new SelectDepartureMenuHandler(airports);
+            SelectionMenuView<Airport> airportsView = new SelectionMenuView<>(airports)
+                    .setElementConsumer((Airport a, Integer index) -> System.out.printf("%d. %s\n", index, a))
+                    .setMenuMessage("Select a departure airport: ");
 
-        // O tambien se puede
+            final List<Airport> chosenAirports = new ArrayList<>();
 
-        SelectionMenuView<Airport> view = new SelectionMenuView<>(airports)
-            .setElementConsumer((Airport e, Integer index) -> System.out.printf("%d - %s\n", index, e.getName()))
-            .setMenuMessage("Welcome to Aviasales!\nPlease, select a departure point.\n");
+            ListMenuHandler<Airport> airportMenuHandler = new ListMenuHandler<>(airportsView)
+                    .setOptionConsumer((a, _) -> chosenAirports.add(a));
 
-        ListMenuHandler<Airport> menu2 = new ListMenuHandler<>(airports)
-                .setView(view)
-                .setOptionConsumer((e, index) -> System.out.printf("Selected option %d with object %s\n", index, e));
+            airportMenuHandler.processMenuOption();
 
-        menu.processMenuOption();
+            List<Route> routes = routeDao.get(Map.of("id_from", chosenAirports.getFirst().getId()));
+            List<Airport> availableAirports = airports.stream()
+                    .filter(airport -> routes.stream()
+                            .anyMatch(route -> route.getIdTo() == airport.getId())
+                    ).toList();
+
+            airportsView.setOptions(availableAirports);
+            airportMenuHandler.processMenuOption();
+
+            LoggerService.println(chosenAirports.getFirst() + " -> " + chosenAirports.get(1));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
