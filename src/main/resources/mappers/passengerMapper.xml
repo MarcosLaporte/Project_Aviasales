@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="entities.Passenger">
+    <resultMap id="passengerResultMap" type="entities.Passenger">
+        <result property="lastName" column="last_name"/>
+    </resultMap>
+
+    <select id="get" parameterType="map" resultType="entities.Passenger" resultMap="passengerResultMap">
+        SELECT * FROM passengers
+        <where>
+            <foreach collection="_parameter" index="key" item="value" separator=" AND ">
+                ${key} = #{value}
+            </foreach>
+        </where>;
+    </select>
+
+    <insert id="create" parameterType="entities.Passenger">
+        INSERT INTO passengers (name, last_name)
+        VALUES (#{name}, #{lastName});
+    </insert>
+
+    <update id="update" parameterType="map">
+        UPDATE passengers
+        <set>
+            <foreach collection="values" index="key" item="value" separator=",">
+                ${key} = #{value}
+            </foreach>
+        </set>
+        <where>
+            <foreach collection="filters" index="key" item="value" separator=" AND ">
+                ${key} = #{value}
+            </foreach>
+        </where>;
+    </update>
+
+    <delete id="delete" parameterType="map">
+        DELETE FROM passengers
+        <where>
+            <foreach collection="_parameter" index="key" item="value" separator=" AND ">
+                ${key} = #{value}
+            </foreach>
+        </where>;
+    </delete>
+</mapper>
