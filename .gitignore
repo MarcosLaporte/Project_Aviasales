@@ -11,6 +11,7 @@ target/
 *.iws
 *.iml
 *.ipr
+config.properties
 
 ### Eclipse ###
 .apt_generated
@@ -37,5 +38,5 @@ build/
 ### Mac OS ###
 .DS_Store
 
-src/main/resources/config.properties
-config.properties
+### Database properties ###
+/src/main/resources/config.properties
