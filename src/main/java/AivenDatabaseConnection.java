@@ -28,8 +28,6 @@ public class AivenDatabaseConnection {
             e.printStackTrace();
         }
     }
-
-    // Método para testear la conexión
     public void testConnection() {
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             System.out.println("Aiven worked.");
