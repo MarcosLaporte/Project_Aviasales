@@ -1,113 +1,92 @@
+import entities.Airline;
 import entities.Airport;
-import view.departures.SelectDepartureMenuHandler;
-import view.general.ListMenuHandler;
-import view.general.MenuElement;
-import view.general.SelectionMenuView;
+import entities.Entity;
+import entities.Route;
+import org.apache.logging.log4j.Level;
+import services.MyBatis;
+import utils.EntityReflection;
+import utils.LoggerService;
+import view.ListMenuHandler;
+import view.SelectionMenuView;
 
-import java.util.Arrays;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
-    public static Airport someAirport = null;
+    private enum Menu {
+        NEW_AIRLINE, NEW_AIRPORT, NEW_ROUTE, NEW_TRIP;
+
+        @Override
+        public String toString() {
+            return super.toString().replace('_', ' ');
+        }
+    }
 
     public static void main(String[] args) {
+        SelectionMenuView<Menu> view = new SelectionMenuView<>(List.of(Menu.values()))
+                .setElementConsumer((Menu e, Integer index) -> System.out.printf("%d. %s\n", index, e))
+                .setMenuMessage("Select an action to perform: ");
 
-        /*int[][] graph = {
-                {0, 4, Global.INF, 5, Global.INF},
-                {Global.INF, 0, 1, Global.INF, 6},
-                {2, Global.INF, 0, 3, Global.INF},
-                {Global.INF, Global.INF, 1, 0, 2},
-                {1, Global.INF, Global.INF, 4, 2}
-        };
-
-        HashMap<Character, HashMap<Character, Integer>> distances = PathFindingService.shortestPath(graph, Global.INF);
-
-        distances.forEach((key, value) -> {
-            System.out.println(key);
-            value.forEach((l, d) -> System.out.println(l + " " + d));
-        });
-
-        AivenDatabaseConnection.testConnection();*/
-
-        List<Airport> airports = Arrays.asList(
-                new Airport(1, "A"),
-                new Airport(2, "B"),
-                new Airport(3, "C"));
-
-        exampleC();
-    }
-
-    public static void exampleA(List<Airport> airports) {
-        ListMenuHandler<Airport> menu = new SelectDepartureMenuHandler(airports);
-    }
-
-    public static void exampleB(List<Airport> airports){
-        SelectionMenuView<Airport> view = new SelectionMenuView<>(airports)
-                .setElementConsumer((Airport e, Integer index) -> System.out.printf("%d - %s\n", index, e.getName()))
-                .setMenuMessage("Welcome to Aviasales!\nPlease, select a departure point.\n");
-
-        ListMenuHandler<Airport> menu2 = new ListMenuHandler<>(airports)
-                .setView(view)
-                .setOptionConsumer((e, index) -> System.out.printf("Selected option %d with object %s\n", index, e));
-    }
-
-    public static void exampleC(){
-        List<MenuElement> options = Arrays.asList(
-                new MenuElement("Set airport A", Main::funA),
-                new MenuElement("Set airport B", Main::funB),
-                new MenuElement("Set airport C", Main::funC)
-        );
-
-        SelectionMenuView<MenuElement> view = new SelectionMenuView<>(options)
-                .setElementConsumer(
-                        (MenuElement e, Integer index) -> System.out.printf("%d - %s\n", index, e.getName()))
-                .setMenuMessage("Welcome to Aviasales!\nPlease, select an option.\n");
-
-        ListMenuHandler<MenuElement> menu = new ListMenuHandler<>(options)
+        ListMenuHandler<Menu> mainMenu = new ListMenuHandler<>(view)
                 .setLoop(true)
-                .setView(view)
-                .setOptionConsumer((e, index) -> {
-                    System.out.printf("Selected option %d. Executing action:\n", index);
-                    e.getRoutine().execute();
+                .setOptionConsumer((e, _) -> {
+                    switch (e) {
+                        case NEW_AIRLINE -> createEntity(Airline.class);
+                        case NEW_AIRPORT -> createEntity(Airport.class);
+                        case NEW_ROUTE -> createEntity(Route.class);
+                        case NEW_TRIP -> handleNewTrip();
+                    }
                 });
 
-        menu.processMenuOption();
+        System.out.println("Welcome to Aviasales!");
+        mainMenu.processMenuOption();
     }
 
-    public static void funA(){
-        Main.someAirport = new Airport("A");
-        System.out.println(Main.someAirport.getName());
+    private static <T extends Entity> void createEntity(Class<T> clazz) {
+        EntityReflection<T> rs = new EntityReflection<>(clazz);
 
-
-        List<MenuElement> options = Arrays.asList(
-                new MenuElement("Option A", Main::funA),
-                new MenuElement("Option B", Main::funB),
-                new MenuElement("Option C", Main::funC)
-        );
-
-        SelectionMenuView<MenuElement> view = new SelectionMenuView<>(options)
-                .setElementConsumer(
-                        (MenuElement e, Integer index) -> System.out.printf("%d - %s\n", index, e.getName()))
-                .setMenuMessage("Welcome to secondary menu!\nPlease, select an option.\n");
-
-        ListMenuHandler<MenuElement> menu = new ListMenuHandler<>(options)
-                .setView(view)
-                .setOptionConsumer((e, index) -> {
-                    System.out.printf("Selected option %d. Executing action:\n", index);
-                    e.getRoutine().execute();
-                });
-
-        menu.processMenuOption();
+        try (MyBatis<T> dao = new MyBatis<>(clazz)) {
+            if (dao.create(rs.readNewInstance(false)) > 0)
+                LoggerService.println(clazz.getSimpleName() + " created!");
+            else
+                LoggerService.println("No " + clazz.getSimpleName() + " was created.");
+        } catch (Exception e) {
+            LoggerService.log(Level.ERROR, e.getMessage() != null ? e.getMessage() : e.getClass().toString());
+        }
     }
 
-    public static void funB(){
-        Main.someAirport = new Airport("B");
-        System.out.println(Main.someAirport.getName());
-    }
+    private static void handleNewTrip() {
+        try (
+                MyBatis<Airport> airportDao = new MyBatis<>(Airport.class);
+                MyBatis<Route> routeDao = new MyBatis<>(Route.class)
+        ) {
+            List<Airport> airports = airportDao.get(Map.of());
 
-    public static void funC(){
-        Main.someAirport = new Airport("C");
-        System.out.println(Main.someAirport.getName());
+            SelectionMenuView<Airport> airportsView = new SelectionMenuView<>(airports)
+                    .setElementConsumer((Airport a, Integer index) -> System.out.printf("%d. %s\n", index, a))
+                    .setMenuMessage("Select a departure airport: ");
 
+            final List<Airport> chosenAirports = new ArrayList<>();
+
+            ListMenuHandler<Airport> airportMenuHandler = new ListMenuHandler<>(airportsView)
+                    .setOptionConsumer((a, _) -> chosenAirports.add(a));
+
+            airportMenuHandler.processMenuOption();
+
+            List<Route> routes = routeDao.get(Map.of("id_from", chosenAirports.getFirst().getId()));
+            List<Airport> availableAirports = airports.stream()
+                    .filter(airport -> routes.stream()
+                            .anyMatch(route -> route.getIdTo() == airport.getId())
+                    ).toList();
+
+            airportsView.setOptions(availableAirports);
+            airportMenuHandler.processMenuOption();
+
+            LoggerService.println(chosenAirports.getFirst() + " -> " + chosenAirports.get(1));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

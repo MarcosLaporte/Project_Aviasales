@@ -1,4 +1,4 @@
-package view.general;
+package view;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,18 +16,20 @@ public class ListMenuHandler<T> {
     private BiConsumer<T, Integer> processOption;
     private boolean loop = false;
 
-    public ListMenuHandler(List<T> objects) {
-        this.objects = objects;
-        min = 1;
-        max = objects.size() + 1;
+    public ListMenuHandler(SelectionMenuView<T> view) {
+        this.selectionMenuView = view;
+        this.objects = view.options;
+        this.min = 1;
+        this.max = objects.size() + 1;
     }
 
-    public ListMenuHandler(){}
+    public ListMenuHandler() {
+    }
 
     public final void processMenuOption() {
         logger.trace("Entering processMenuOption");
-        selectionMenuView.display();
-        int selectedOption = selectionMenuView.getSelectedOption();
+        this.selectionMenuView.display();
+        int selectedOption = selectionMenuView.retrieveInput();
 
         try {
             logger.debug("Menu option selected: {}\n", selectedOption);
@@ -39,7 +41,7 @@ public class ListMenuHandler<T> {
 
             if (selectedOption == max) {
                 System.out.println("Shutting down program.");
-                System.exit(0);
+                System.exit(0); // FIXME: Doesn't allow returning to previous menu. Shuts down program completely.
             }
 
             processOption.accept(objects.get(selectedOption - 1), selectedOption);
@@ -54,11 +56,6 @@ public class ListMenuHandler<T> {
         if (loop) {
             processMenuOption();
         }
-    }
-
-    public final ListMenuHandler<T> setView(SelectionMenuView<T> view) {
-        this.selectionMenuView = view;
-        return this;
     }
 
     public final ListMenuHandler<T> setOptionConsumer(BiConsumer<T, Integer> consumer) {
