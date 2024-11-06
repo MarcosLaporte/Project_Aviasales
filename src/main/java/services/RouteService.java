@@ -3,49 +3,67 @@ package services;
 import entities.Airport;
 import entities.Route;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import utils.LoggerService;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.ToDoubleFunction;
 
 public class RouteService {
 
     public static final int INF = Integer.MAX_VALUE / 2;
+    private static final Logger log = LogManager.getLogger(RouteService.class);
 
     public void start() {
-        printAllRoutes();
+        printAllKmRoutes();
+        printAllPriceRoutes();
     }
 
-    private void printAllRoutes() {
+
+    private void printAllKmRoutes() {
         List<Airport> airports = getAirports();
         List<Route> routes = getRoutes();
 
-        int[][] graph = makeGraph(airports, routes);
-        int V = graph.length;
+        double[][] graph = makeKmGraph(airports, routes);
         int[][] parent;
-        /*Esto es lo mas importante, paths, es una lista de listas de listas, cuack, simplificado es una matriz como la
-        * que venimos usando pero adentro de la matriz se guarda una lista que contiene los indices de los aeropuertos
-        * por los que tenes que pasar para llegar a cada destino, osea si estas en la fila 2 columna 3, significa que
-        * queres ir del aeropuerto 2 al 3, suponinedo que no hay un camino directo y el camino mas corto es pasar por el
-        * 4 es decir, 2 -> 4 -> 3 entonces en paths.get(2).get(3) va a haber una lista que tiene los indices, [2,4,3]*/
         List<List<List<Integer>>> paths = new ArrayList<>();
 
         parent = initializeParentArray(graph, paths);
 
         applyFloydWarshall(graph, parent, paths);
 
-        System.out.println("Shortest Paths and Distances:");
+        printAllRoutes(graph, paths, "Shortest Paths and Distances:", "Distance");
+    }
+
+    private void printAllPriceRoutes() {
+        List<Airport> airports = getAirports();
+        List<Route> routes = getRoutes();
+
+        double[][] graph = makePriceGraph(airports, routes);
+        int[][] parent;
+        List<List<List<Integer>>> paths = new ArrayList<>();
+
+        parent = initializeParentArray(graph, paths);
+
+        applyFloydWarshall(graph, parent, paths);
+
+        printAllRoutes(graph, paths, "Cheapest Paths and Prices:", "Price");
+    }
+
+    private void printAllRoutes(double[][] graph, List<List<List<Integer>>> paths, String tittle, String sortingValue) {
+        List<Airport> airports = getAirports();
+        int V = graph.length;
+        System.out.println(tittle);
         for (int i = 0; i < V; i++) {
+            LoggerService.println("From: " + airports.get(i).getName());
             for (int j = 0; j < V; j++) {
                 if (i != j && graph[i][j] < INF) {
-                    System.out.print("Path from " + airports.get(i).getName() + " to " + airports.get(j).getName() + "\n-> ");
-
-                    paths.get(i).get(j).forEach(node -> System.out.print(airports.get(node).getName() + " -> ") );
-
-                    System.out.println(" (Distance: " + graph[i][j] + ")");
+                    LoggerService.println("To: " + airports.get(j).getName());
+                    paths.get(i).get(j).forEach(node -> System.out.print(airports.get(node).getName() + " -> "));
+                    System.out.println(" (" + sortingValue + ": " + graph[i][j] + ")");
                 }
             }
             System.out.println();
@@ -60,9 +78,17 @@ public class RouteService {
      * @param airports List of airports to be represented in the graph.
      * @param routes   List of routes connecting airports with distances.
      * @return A matrix representing the distances between each airport pair.
-     * */
-    private int[][] makeGraph(List<Airport> airports, List<Route> routes) {
-        int[][] kmGraph = new int[airports.size()][airports.size()];
+     */
+    private double[][] makeKmGraph(List<Airport> airports, List<Route> routes) {
+        return makeGraph(airports, routes, Route::getKm);
+    }
+
+    private double[][] makePriceGraph(List<Airport> airports, List<Route> routes) {
+        return makeGraph(airports, routes, Route::getPrice);
+    }
+
+    private double[][] makeGraph(List<Airport> airports, List<Route> routes, ToDoubleFunction<Route> function) {
+        double[][] graph = new double[airports.size()][airports.size()];
 
         for (int i = 0; i < airports.size(); i++) {
             Airport airportFrom = airports.get(i);
@@ -72,20 +98,20 @@ public class RouteService {
                 Airport airportTo = airports.get(j);
 
                 if (i == j) {
-                    kmGraph[i][j] = 0;
+                    graph[i][j] = 0;
                 } else {
                     for (Route r : routes) {
                         if (r.getIdFrom() == airportFrom.getId() && r.getIdTo() == airportTo.getId()) {
-                            kmGraph[i][j] = r.getKm();
+                            graph[i][j] = function.applyAsDouble(r);
                             break;
                         } else {
-                            kmGraph[i][j] = INF;
+                            graph[i][j] = INF;
                         }
                     }
                 }
             }
         }
-        return kmGraph;
+        return graph;
     }
 
     /**
@@ -112,7 +138,7 @@ public class RouteService {
      * @param parent The parent matrix used to track paths.
      * @param paths  A 3D list storing the paths for each airport pair.
      */
-    private void applyFloydWarshall(int[][] graph, int[][] parent, List<List<List<Integer>>> paths) {
+    private void applyFloydWarshall(double[][] graph, int[][] parent, List<List<List<Integer>>> paths) {
         int V = graph.length;
         for (int i = 0; i < V; i++) {
             for (int j = 0; j < V; j++) {
@@ -136,11 +162,11 @@ public class RouteService {
      * Initializes the parent array and paths list for the Floyd-Warshall algorithm.
      * Each path initially consists of the start and end nodes of each direct route.
      *
-     * @param graph  The distance matrix for airport routes.
-     * @param paths  A 3D list to hold each path from source to destination.
+     * @param graph The distance matrix for airport routes.
+     * @param paths A 3D list to hold each path from source to destination.
      * @return An initialized parent matrix to be used in path updates.
      */
-    private int[][] initializeParentArray(int[][] graph, List<List<List<Integer>>> paths){
+    private int[][] initializeParentArray(double[][] graph, List<List<List<Integer>>> paths) {
         int V = graph.length;
         int[][] parent = new int[V][V];
         // Initialize parent array
