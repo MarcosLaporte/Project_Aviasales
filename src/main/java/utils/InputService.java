@@ -12,6 +12,8 @@ import java.util.Locale;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
+import static java.lang.System.exit;
+
 public abstract class InputService {
     private static final Scanner SCANNER = new Scanner(System.in);
     static {
@@ -107,11 +109,10 @@ public abstract class InputService {
      * @return true if the user inputs 'Y', otherwise false.
      */
     public static boolean readConfirmation(String msg) {
-        return readCharInValues(
-                msg,
-                "Invalid value. Try again (Y/N): ",
-                new char[]{'Y', 'N'}
-        ) == 'Y';
+        char[] allowedChars = new char[]{'Y', 'N'};
+        String errorMsg = "Invalid value. Try again (Y/N): ";
+
+        return readCharInValues(msg, errorMsg, allowedChars) == 'Y';
     }
   
     /**
@@ -124,17 +125,21 @@ public abstract class InputService {
      */
     public static String readString(String msg, int minLength, int maxLength) {
         LoggerService.print(msg);
-        String inputStr;
+        String inputStr = "";
         do {
             try {
                 inputStr = SCANNER.nextLine();
                 Validate.notBlank(inputStr);
                 Validate.inclusiveBetween(minLength, maxLength, inputStr.length(),
                         String.format("String must be between %d and %d characters long.", minLength, maxLength));
-            } catch (Exception e) {
+            } catch (IllegalArgumentException e) {
                 LoggerService.consoleLog(Level.WARN, e.getMessage());
                 inputStr = StringUtils.EMPTY;
                 LoggerService.print("Try again: ");
+            } catch(NullPointerException e) {
+                LoggerService.consoleLog(Level.FATAL, e.getMessage());
+                LoggerService.consoleLog(Level.FATAL, "Exiting program...");
+                exit(0);
             }
         } while (StringUtils.isEmpty(inputStr));
 

@@ -1,39 +1,42 @@
-package view.menu;
+package view.general;
 
-import view.general.SelectionMenu;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public abstract class ListMenuHandler<T> extends MenuHandler {
+public class ListMenuHandler<T> {
 
-    protected final List<T> objects;
-    private final int min;
-    private final int max;
-    private SelectionMenu<T> selectionMenuView;
+    protected static final Logger logger = LogManager.getLogger(ListMenuHandler.class);
+    protected List<T> objects;
+    private int min;
+    private int max;
+    private SelectionMenuView<T> selectionMenuView;
     private BiConsumer<T, Integer> processOption;
 
-    public ListMenuHandler(List<T> objects){
+    public ListMenuHandler(List<T> objects) {
         this.objects = objects;
         min = 1;
         max = objects.size() + 1;
     }
 
-    @Override
+    public ListMenuHandler(){}
+
     public final void processMenuOption() {
         logger.trace("Entering processMenuOption");
         selectionMenuView.display();
         int selectedOption = selectionMenuView.getSelectedOption();
 
         try {
-            logger.debug("Menu option selected: {}", selectedOption);
+            logger.debug("Menu option selected: {}\n", selectedOption);
 
-            if(selectedOption < min || selectedOption > max){
+            if (selectedOption < min || selectedOption > max) {
                 System.out.println("Invalid option selected. Re-displaying view.menu.");
                 processMenuOption();
             }
 
-            if (selectedOption == max){
+            if (selectedOption == max) {
                 System.out.println("Shutting down program.");
                 System.exit(0);
             }
@@ -50,14 +53,14 @@ public abstract class ListMenuHandler<T> extends MenuHandler {
         processMenuOption();
     }
 
-    protected final void setView(SelectionMenu<T> view){
+    public final ListMenuHandler<T> setView(SelectionMenuView<T> view) {
         this.selectionMenuView = view;
+        return this;
     }
 
-    protected final void setOptionConsumer(BiConsumer<T, Integer> consumer){
+    public final ListMenuHandler<T> setOptionConsumer(BiConsumer<T, Integer> consumer) {
         this.processOption = consumer;
+        return this;
     }
-
-    protected abstract void setConfiguration();
 }
 

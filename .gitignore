@@ -40,3 +40,6 @@ build/
 
 ### Database properties ###
 /src/main/resources/config.properties
+
+### Logs ###
+/logs

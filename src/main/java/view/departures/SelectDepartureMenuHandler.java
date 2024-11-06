@@ -1,7 +1,7 @@
 package view.departures;
 
 import entities.Airport;
-import view.menu.ListMenuHandler;
+import view.general.ListMenuHandler;
 
 import java.util.List;
 
@@ -12,10 +12,9 @@ public class SelectDepartureMenuHandler extends ListMenuHandler<Airport> {
         setConfiguration();
     }
 
-    @Override
     protected void setConfiguration() {
         setView(new DepartureSelectionView(objects));
-        setOptionConsumer((e, index) -> System.out.printf("Selected option %d with object %s", index, e));
+        setOptionConsumer((e, index) -> System.out.printf("Selected option %d with object %s\n", index, e));
     }
 }
 
