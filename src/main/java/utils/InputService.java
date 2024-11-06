@@ -29,24 +29,37 @@ public abstract class InputService {
      */
   
     public static <T extends Number> T readNumber(String msg, String errorMsg, T min, T max, Class<T> clazz) {
+        //Prints message passed by reference
         LoggerService.print(msg);
+
+        // Creates an inputNumber with passed by reference value min of declared type T.
         T inputNumber = min;
+
+        // Sets input as invalid.
         boolean isValid = false;
-        do {
+        while (!isValid){
             try {
+                // Use readAnswer with declared class T
                 inputNumber = readAnswer(clazz);
+                // Checks if number is within the passed threshold  [min, max]
                 Validate.inclusiveBetween(min.doubleValue(), max.doubleValue(), inputNumber.doubleValue());
+                // If not valid, exception might be thrown
                 isValid = true;
             } catch (Exception e) {
                 LoggerService.print(errorMsg);
             } finally {
                 SCANNER.nextLine(); //Cleans buffer
             }
-        } while (!isValid);
+        }
         return inputNumber;
     }
 
-    public static <T extends Number> T readAnswer(Class<T> clazz) throws ClassCastException {
+    /*ONLY USED IN  readNumber FUNCTION*/
+    public static <T extends Number> T readAnswer(Class<T> clazz) throws ClassCastException, IllegalArgumentException {
+        /* Depending on the Number class passed by parameter clazz
+            it executes the corresponding scanner input read function and performs a cast from the Scanner type to the class..
+            If a class is not supported, it throws an exception.
+         */
         return switch (clazz.getSimpleName()) {
             case "Byte" -> clazz.cast(SCANNER.nextByte());
             case "Short" -> clazz.cast(SCANNER.nextShort());
@@ -68,10 +81,19 @@ public abstract class InputService {
      */
     public static char readCharInValues(String msg, String errorMsg, char[] availableValues) {
         LoggerService.print(msg);
-        char inputChar = Character.toUpperCase(SCANNER.next().charAt(0));
-        while (!ArrayUtils.contains(availableValues, inputChar)) {
+        String next = SCANNER.next();
+        char inputChar = Character.toUpperCase(next.charAt(0));
+
+        boolean containsRequiredValues = false;
+        boolean isChar = next.length() == 1;
+
+        while (!containsRequiredValues || !isChar) {
             LoggerService.print(errorMsg);
-            inputChar = Character.toUpperCase(SCANNER.next().charAt(0));
+            next = SCANNER.next();
+
+            inputChar = Character.toUpperCase(next.charAt(0));
+            isChar = next.length() == 1;
+            containsRequiredValues = ArrayUtils.contains(availableValues, inputChar);
         }
 
         SCANNER.nextLine(); //Cleans buffer
