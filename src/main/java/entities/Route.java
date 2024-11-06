@@ -103,4 +103,9 @@ public class Route implements Entity {
     public void setPrice(double price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "Route{" + "id=" + id + ", idFrom=" + idFrom + ", idTo=" + idTo + ", km=" + km + ", price=" + price + '}';
+    }
 }
