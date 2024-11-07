@@ -14,6 +14,7 @@ public class ListMenuHandler<T> {
     private int max;
     private SelectionMenuView<T> selectionMenuView;
     private BiConsumer<T, Integer> processOption;
+    private boolean loop = false;
 
     public ListMenuHandler(List<T> objects) {
         this.objects = objects;
@@ -50,7 +51,9 @@ public class ListMenuHandler<T> {
         }
 
         logger.trace("Exiting processMenuOption");
-        processMenuOption();
+        if (loop) {
+            processMenuOption();
+        }
     }
 
     public final ListMenuHandler<T> setView(SelectionMenuView<T> view) {
@@ -60,6 +63,11 @@ public class ListMenuHandler<T> {
 
     public final ListMenuHandler<T> setOptionConsumer(BiConsumer<T, Integer> consumer) {
         this.processOption = consumer;
+        return this;
+    }
+
+    public final ListMenuHandler<T> setLoop(boolean loop) {
+        this.loop = loop;
         return this;
     }
 }
