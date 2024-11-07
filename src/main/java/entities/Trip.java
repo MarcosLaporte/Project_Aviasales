@@ -35,6 +35,20 @@ public class Trip {
         this.date = date;
     }
 
+    public Trip(int passId, int routeId, LocalDate date) {
+        this.passId = passId;
+        this.routeId = routeId;
+        this.date = date;
+    }
+
+    private Trip(Integer id, Integer passId, Integer routeId, LocalDate date) {
+        this(id.intValue(), passId.intValue(), routeId.intValue(), date);
+    }
+
+    private Trip(Integer passId, Integer routeId, LocalDate date) {
+        this(passId.intValue(), routeId.intValue(), date);
+    }
+
     @JsonGetter("id")
     public int getId() {
         return id;
@@ -73,5 +87,10 @@ public class Trip {
     @JsonSetter("date")
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d - %d | %s", this.passId, this.routeId, this.date);
     }
 }

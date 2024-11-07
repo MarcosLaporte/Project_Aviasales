@@ -176,12 +176,12 @@ public abstract class InputService {
      * @param cancelMessage the message for the cancellation option, or null if not applicable.
      * @return the index of the selected item in the list, or -1 if the cancel option is selected.
      */
-    public static int selectIndexFromList(String selectMessage, List<String> items, String cancelMessage) {
+    public static int selectIndexFromList(String selectMessage, List<?> items, String cancelMessage) {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < items.size(); i++) {
             sb.append('\n').append(i + 1).append(". ");
-            sb.append(items.get(i));
+            sb.append(items.get(i).toString());
         }
 
         int min = 1;
