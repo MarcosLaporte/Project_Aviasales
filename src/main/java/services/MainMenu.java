@@ -71,6 +71,7 @@ public class MainMenu {
             ListMenuHandler<Airport> airportMenuHandler = new ListMenuHandler<>(airportsView)
                     .setOptionConsumer((a, index) -> {
                         chosenAirports.add(a);
+                        airports.remove(index - 1); // Remove selected airport to avoid duplicate selection
                         airportsIndex.add(index - 1);
                     });
 
@@ -79,6 +80,8 @@ public class MainMenu {
             airportsView.setMenuMessage("Select destination: ");
             airportMenuHandler.processMenuOption(); // Arrival
 
+            airports.add(airportsIndex.getFirst(), chosenAirports.getFirst()); // Put back selected airports
+            airports.add(airportsIndex.getLast(), chosenAirports.getLast()); // Put back selected airports
             LoggerService.println(chosenAirports.getFirst() + " -> " + chosenAirports.get(1));
 
             RouteService.printRouteBetweenAirports(
