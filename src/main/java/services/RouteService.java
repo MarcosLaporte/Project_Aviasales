@@ -40,8 +40,8 @@ public class RouteService {
         int endIndex = scanner.nextInt();
 
         printRouteBetweenAirports(startIndex, endIndex, airports);
-        //printAllKmRoutes();
-        //printAllPriceRoutes();
+        printAllKmRoutes();
+        printAllPriceRoutes();
 
     }
 
@@ -270,23 +270,43 @@ public class RouteService {
      */
     private void printRouteBetweenAirports(int startIndex, int endIndex, List<Airport> airports) {
         List<Route> routes = getRoutes();
-        double[][] graph = makeKmGraph(airports, routes);
-        int V = graph.length;
-        int[][] parent;
-        List<List<List<Integer>>> paths = new ArrayList<>();
 
-        parent = initializeParentArray(graph, paths);
-        applyFloydWarshall(graph, parent, paths);
+        // distance graph
+        double[][] kmGraph = makeKmGraph(airports, routes);
+        int[][] kmParent;
+        List<List<List<Integer>>> kmPaths = new ArrayList<>();
 
-        // here we get the shortest path from one to another
-        if (startIndex != endIndex && graph[startIndex][endIndex] < INF) {
+        kmParent = initializeParentArray(kmGraph, kmPaths);
+        applyFloydWarshall(kmGraph, kmParent, kmPaths);
+
+        // price graph
+        double[][] priceGraph = makePriceGraph(airports, routes);
+        int[][] priceParent;
+        List<List<List<Integer>>> pricePaths = new ArrayList<>();
+
+        priceParent = initializeParentArray(priceGraph, pricePaths);
+        applyFloydWarshall(priceGraph, priceParent, pricePaths);
+
+        // shortest route
+        if (startIndex != endIndex && kmGraph[startIndex][endIndex] < INF) {
             System.out.println("Shortest path from " + airports.get(startIndex).getName() +
                     " to " + airports.get(endIndex).getName() + ":");
-            paths.get(startIndex).get(endIndex).forEach(index ->
+            kmPaths.get(startIndex).get(endIndex).forEach(index ->
                     System.out.print(airports.get(index).getName() + " -> "));
-            System.out.println(" (Distance: " + graph[startIndex][endIndex] + ")");
+            System.out.println(" (Distance: " + kmGraph[startIndex][endIndex] + " km)");
         } else {
-            System.out.println("No available path between the selected airports.");
+            System.out.println("No available path between the selected airports by distance.");
+        }
+
+        // Cheapest route
+        if (startIndex != endIndex && priceGraph[startIndex][endIndex] < INF) {
+            System.out.println("Cheapest path from " + airports.get(startIndex).getName() +
+                    " to " + airports.get(endIndex).getName() + ":");
+            pricePaths.get(startIndex).get(endIndex).forEach(index ->
+                    System.out.print(airports.get(index).getName() + " -> "));
+            System.out.println(" (Price: $" + priceGraph[startIndex][endIndex] + ")");
+        } else {
+            System.out.println("No available path between the selected airports by price.");
         }
     }
 

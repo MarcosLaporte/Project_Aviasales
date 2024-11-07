@@ -352,3 +352,51 @@ DEBUG - <==      Total: 5
 DEBUG - ==>  Preparing: SELECT * FROM routes ;
 DEBUG - ==> Parameters: 
 DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
