@@ -41,7 +41,7 @@ public class ListMenuHandler<T> {
 
             if (selectedOption == max) {
                 System.out.println("Shutting down program.");
-                System.exit(0); // FIXME: Doesn't allow returning to previous menu. Shuts down program completely.
+                System.exit(0);
             }
 
             processOption.accept(objects.get(selectedOption - 1), selectedOption);

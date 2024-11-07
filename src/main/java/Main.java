@@ -4,12 +4,14 @@ import entities.Entity;
 import entities.Route;
 import org.apache.logging.log4j.Level;
 import services.MyBatis;
+import services.RouteService;
 import utils.EntityReflection;
 import utils.LoggerService;
 import view.ListMenuHandler;
 import view.SelectionMenuView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -57,10 +59,7 @@ public class Main {
     }
 
     private static void handleNewTrip() {
-        try (
-                MyBatis<Airport> airportDao = new MyBatis<>(Airport.class);
-                MyBatis<Route> routeDao = new MyBatis<>(Route.class)
-        ) {
+        try (MyBatis<Airport> airportDao = new MyBatis<>(Airport.class)) {
             List<Airport> airports = airportDao.get(Map.of());
 
             SelectionMenuView<Airport> airportsView = new SelectionMenuView<>(airports)
@@ -68,22 +67,26 @@ public class Main {
                     .setMenuMessage("Select a departure airport: ");
 
             final List<Airport> chosenAirports = new ArrayList<>();
+            final List<Integer> airportsIndex = new ArrayList<>();
 
             ListMenuHandler<Airport> airportMenuHandler = new ListMenuHandler<>(airportsView)
-                    .setOptionConsumer((a, _) -> chosenAirports.add(a));
+                    .setOptionConsumer((a, index) -> {
+                        chosenAirports.add(a);
+                        airportsIndex.add(index - 1);
+                    });
 
-            airportMenuHandler.processMenuOption();
+            airportMenuHandler.processMenuOption(); // Departure
 
-            List<Route> routes = routeDao.get(Map.of("id_from", chosenAirports.getFirst().getId()));
-            List<Airport> availableAirports = airports.stream()
-                    .filter(airport -> routes.stream()
-                            .anyMatch(route -> route.getIdTo() == airport.getId())
-                    ).toList();
-
-            airportsView.setOptions(availableAirports);
-            airportMenuHandler.processMenuOption();
+            airportsView.setMenuMessage("Select destination: ");
+            airportMenuHandler.processMenuOption(); // Arrival
 
             LoggerService.println(chosenAirports.getFirst() + " -> " + chosenAirports.get(1));
+
+            RouteService.printRouteBetweenAirports(
+                    airportsIndex.getFirst(),
+                    airportsIndex.getLast(),
+                    airports
+            );
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
