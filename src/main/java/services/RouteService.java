@@ -235,24 +235,24 @@ public class RouteService {
      * @param airports airport list
      */
     private void printRouteBetweenAirports(int startIndex, int endIndex, List<Airport> airports) {
-        List<Route> routes = getRoutes();
-        int[][] graph = makeGraph(airports, routes);
-        int V = graph.length;
+        List<Route> routes = getRoutes(); //aca tengo todas las rutas disp
+        int[][] graph = makeGraph(airports, routes);//convierto aeropuertos y rutas en una matriz
+        int V = graph.length; //cant de aeropeurtos
         int[][] parent;
-        List<List<List<Integer>>> paths = new ArrayList<>();
+        List<List<List<Integer>>> paths = new ArrayList<>();//arreglo para rastrear los caminos
 
         parent = initializeParentArray(graph, paths);
-        applyFloydWarshall(graph, parent, paths);
+        applyFloydWarshall(graph, parent, paths); //corro el algoritmo
 
         // here we get the shortest path from one to another
         if (startIndex != endIndex && graph[startIndex][endIndex] < INF) {
             System.out.println("Shortest path from " + airports.get(startIndex).getName() +
                     " to " + airports.get(endIndex).getName() + ":");
             paths.get(startIndex).get(endIndex).forEach(index ->
-                    System.out.print(airports.get(index).getName() + " -> "));
-            System.out.println(" (Distance: " + graph[startIndex][endIndex] + ")");
+                    System.out.print(airports.get(index).getName() + " -> "));//aca tengo el camino especifico
+            System.out.println(" (Distance: " + graph[startIndex][endIndex] + ")"); //aca lo muestro
         } else {
-            System.out.println("No available path between the selected airports.");
+            System.out.println("No available path between the selected airports."); //si no hay ruta
         }
     }
 
