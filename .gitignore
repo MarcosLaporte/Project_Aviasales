@@ -4,7 +4,7 @@ target/
 !**/src/test/**/target/
 
 ### IntelliJ IDEA ###
-.idea/
+/.idea/
 *.iws
 *.iml
 *.ipr
@@ -36,4 +36,4 @@ build/
 .DS_Store
 
 ### Program Logs ###
-logs/
+/logs/
