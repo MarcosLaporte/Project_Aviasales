@@ -44,6 +44,22 @@ public class Route implements Entity {
         this.price = price;
     }
 
+    public Route(int idFrom, int idTo, int airlineId, int km, double price) {
+        this.idFrom = idFrom;
+        this.idTo = idTo;
+        this.airlineId = airlineId;
+        this.km = km;
+        this.price = price;
+    }
+
+    private Route(Integer id, Integer idFrom, Integer idTo, Integer airlineId, Integer km, Double price) {
+        this(id.intValue(), idFrom.intValue(), idTo.intValue(), airlineId.intValue(), km.intValue(), price.doubleValue());
+    }
+
+    private Route(Integer idFrom, Integer idTo, Integer airlineId, Integer km, Double price) {
+        this(idFrom.intValue(), idTo.intValue(), airlineId.intValue(), km.intValue(), price.doubleValue());
+    }
+
     @JsonGetter("id")
     public int getId() {
         return id;

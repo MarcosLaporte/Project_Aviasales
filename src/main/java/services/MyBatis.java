@@ -4,14 +4,13 @@ import entities.Entity;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.*;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class MyBatis<T extends Entity> implements IDao<T>, Closeable {
+public final class MyBatis<T extends Entity> implements IDao<T>, AutoCloseable {
     private final SqlSession session;
     public final Class<T> clazz;
 

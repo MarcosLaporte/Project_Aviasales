@@ -53,7 +53,7 @@ public class EntityReflection<T extends Entity> {
         return rs.createInstance(paramValues);
     }
 
-    private Map<String, Object> readValues(Field[] fields) {
+    private Map<String, Object> readSelectValues(Field[] fields) {
         Map<String, Object> valuesMap = new HashMap<>();
 
         do {
@@ -81,11 +81,11 @@ public class EntityReflection<T extends Entity> {
 
     public Map<String, Object> readNewValues(boolean readAutoIncrementFields) {
         List<Field> fields = readAutoIncrementFields ? COLUMN_FIELDS : COLUMN_FIELDS_NOT_AI;
-        return readValues(fields.toArray(Field[]::new));
+        return readSelectValues(fields.toArray(Field[]::new));
     }
 
     public Map<String, Object> readConditionValues() {
-        return readValues(COLUMN_FIELDS.toArray(Field[]::new));
+        return readSelectValues(COLUMN_FIELDS.toArray(Field[]::new));
     }
 
     private Object readValue(Class<?> fieldType, String fieldName, Range rangeAnn, Size sizeAnn) {
