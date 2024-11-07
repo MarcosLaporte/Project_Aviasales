@@ -122,6 +122,6 @@ public class Route implements Entity {
 
     @Override
     public String toString() {
-        return String.format("%d -> %d | %dkm $%.2f", this.idFrom, this.idTo, this.km, this.price);
+        return "Route{" + "id=" + id + ", idFrom=" + idFrom + ", idTo=" + idTo + ", km=" + km + ", price=" + price + '}';
     }
 }

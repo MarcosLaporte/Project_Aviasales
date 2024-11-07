@@ -205,6 +205,7 @@ public abstract class InputService {
      */
     public static int selectIndexFromList(String selectMessage, List<?> items, String cancelMessage) {
         StringBuilder sb = new StringBuilder();
+
         for (int i = 0; i < items.size(); i++) {
             sb.append('\n').append(i + 1).append(". ");
             sb.append(items.get(i).toString());
