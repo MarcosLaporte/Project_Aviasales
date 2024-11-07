@@ -30,6 +30,11 @@ public class Passenger {
         this.lastName = lastName;
     }
 
+    public Passenger(String name, String lastName) {
+        this.name = name;
+        this.lastName = lastName;
+    }
+
     @JsonGetter("id")
     public int getId() {
         return id;
@@ -58,5 +63,10 @@ public class Passenger {
     @JsonSetter("name")
     public void setLastName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("ID%d - %s %s", this.id, this.name, this.lastName);
     }
 }
