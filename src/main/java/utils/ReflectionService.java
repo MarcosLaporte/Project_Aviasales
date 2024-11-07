@@ -301,4 +301,10 @@ public record ReflectionService<T>(Class<T> clazz) {
         return fieldSizeMap;
     }
 
+    public static boolean assertClass(Object object, Class clazz){
+        String objClass = object.getClass().getSimpleName();
+        String objectiveClassName = clazz.getSimpleName();
+        return (objClass.equals(objectiveClassName));
+    }
+
 }
