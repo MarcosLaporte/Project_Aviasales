@@ -77,7 +77,9 @@ public class MainMenu {
 
             airportMenuHandler.processMenuOption(); // Departure
 
-            airportsView.setMenuMessage("Select destination: ");
+            airportsView
+                    .setOptions(airports) // Update items list
+                    .setMenuMessage("Select destination: ");
             airportMenuHandler.processMenuOption(); // Arrival
 
             airports.add(airportsIndex.getFirst(), chosenAirports.getFirst()); // Put back selected airports
