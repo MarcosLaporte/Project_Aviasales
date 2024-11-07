@@ -3,24 +3,17 @@ package view;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.List;
 import java.util.function.BiConsumer;
 
 public class ListMenuHandler<T> {
 
     protected static final Logger logger = LogManager.getLogger(ListMenuHandler.class);
-    protected List<T> objects;
-    private int min;
-    private int max;
     private SelectionMenuView<T> selectionMenuView;
     private BiConsumer<T, Integer> processOption;
     private boolean loop = false;
 
     public ListMenuHandler(SelectionMenuView<T> view) {
         this.selectionMenuView = view;
-        this.objects = view.options;
-        this.min = 1;
-        this.max = objects.size() + 1;
     }
 
     public ListMenuHandler() {
@@ -34,17 +27,17 @@ public class ListMenuHandler<T> {
         try {
             logger.debug("Menu option selected: {}\n", selectedOption);
 
-            if (selectedOption < min || selectedOption > max) {
+            if (selectedOption < selectionMenuView.min || selectedOption > selectionMenuView.max) {
                 System.out.println("Invalid option selected. Re-displaying view.menu.");
                 processMenuOption();
             }
 
-            if (selectedOption == max) {
+            if (selectedOption == selectionMenuView.max) {
                 System.out.println("Shutting down program.");
                 System.exit(0);
             }
 
-            processOption.accept(objects.get(selectedOption - 1), selectedOption);
+            processOption.accept(selectionMenuView.options.get(selectedOption - 1), selectedOption);
 
         } catch (NumberFormatException e) {
             logger.error("Invalid utils.input format for view.menu option selection: {}", e.getMessage());
