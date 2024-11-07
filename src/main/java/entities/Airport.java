@@ -51,9 +51,6 @@ public class Airport implements Entity {
 
     @Override
     public String toString() {
-        return "Airport{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return String.format("ID%d - %s", this.id, this.name);
     }
 }
