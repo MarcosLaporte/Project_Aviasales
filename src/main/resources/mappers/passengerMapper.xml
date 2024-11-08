@@ -14,7 +14,8 @@
             <foreach collection="_parameter" index="key" item="value" separator=" AND ">
                 ${key} = #{value}
             </foreach>
-        </where>;
+        </where>
+        ORDER BY id;
     </select>
 
     <insert id="create" parameterType="entities.Passenger">
