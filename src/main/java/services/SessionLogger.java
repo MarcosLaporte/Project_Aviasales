@@ -42,26 +42,28 @@ public class SessionLogger {
     }
 
     private void appendSessionToLogFile() {
-        List<Map<String, Object>> sessions;
+        List<Map<String, Object>> sessions = loadExistingSessions();
+        sessions.add(currentSession);
+        writeSessionsToFile(sessions);
+    }
+
+    private List<Map<String, Object>> loadExistingSessions() {
         File file = new File(LOG_FILE_PATH);
-
-
-        if (file.exists()) {
+        if (file.exists() && file.length() > 0) {
             try {
-                sessions = mapper.readValue(file, new TypeReference<List<Map<String, Object>>>() {});
+                return mapper.readValue(file, new TypeReference<List<Map<String, Object>>>() {});
             } catch (IOException e) {
                 System.err.println("Error reading log file: " + e.getMessage());
-                sessions = new ArrayList<>();
             }
-        } else {
-            sessions = new ArrayList<>();
         }
+        // Return a new list if file is empty or cannot be read
+        return new ArrayList<>();
+    }
 
-
-        sessions.add(currentSession);
+    private void writeSessionsToFile(List<Map<String, Object>> sessions) {
         try {
             ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
-            writer.writeValue(file, sessions);
+            writer.writeValue(new File(LOG_FILE_PATH), sessions);
         } catch (IOException e) {
             System.err.println("Error writing to log file: " + e.getMessage());
         }
