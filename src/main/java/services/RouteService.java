@@ -5,26 +5,33 @@ import entities.Route;
 import org.apache.logging.log4j.Level;
 import utils.LoggerService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 
-public abstract class RouteService {
+public final class RouteService {
 
     public static final Double INF = Double.POSITIVE_INFINITY;
+    private final List<Airport> airports;
+    private final Airport start;
+    private final Airport end;
+
+    public RouteService(List<Airport> airports, Airport start, Airport end) {
+        this.airports = airports;
+        this.start = start;
+        this.end = end;
+    }
 
     /**
      * Creates the graph with every row and column as a destination, having te direct distance between them as
      * the value inside the matrix, if there is none is INF, the index are align with the list sent by param
      * for example airports.get(0) is the row 0 in the matrix
      *
-     * @param airports List of airports to be represented in the graph.
-     * @param routes   List of routes connecting airports with distances.
+     * @param routes List of routes connecting airports with distances.
      * @return A matrix representing the distances between each airport pair.
      */
-    private static double[][] makeGraph(List<Airport> airports, List<Route> routes, ToDoubleFunction<Route> function) {
+    private double[][] makeGraph(List<Route> routes, ToDoubleFunction<Route> function) {
         final int size = airports.size();
         double[][] graph = new double[size][size];
 
@@ -107,21 +114,23 @@ public abstract class RouteService {
 
     private static List<Route> getRoutes() {
         try (MyBatis<Route> routesDAO = new MyBatis<>(Route.class)) {
-            return routesDAO.get(Map.of());
+            return routesDAO.get();
         } catch (Exception e) {
             return List.of();
         }
     }
 
     /**
-     * Prints the shortest and cheapest routes between two airports using pre-calculated distances and prices.
-     * Calculates and displays the path, total distance, and price if routes exist between the airports.
+     * Retrieves the optimal route path between two specified airports, based on the provided route metric.
+     * <p>
+     * Uses the Floyd-Warshall algorithm to calculate the optimal path, allowing for selection
+     * between shortest and cheapest paths through the `routeFunction` parameter.
+     * If no path exists between the airports, an empty list is returned.
      *
-     * @param start    The departure airport to look for in the list.
-     * @param end      The destination airport to look for in the list.
-     * @param airports The list of available airports, each represented by an Airport object.
+     * @param routeFunction A function defining the metric for route calculation (e.g., Route::getKm for distance, Route::getPrice for cost).
+     * @return A list of Route objects representing the optimal path between the start and end airports, or an empty list if no route exists.
      */
-    public static void printRouteBetweenAirports(Airport start, Airport end, List<Airport> airports) {
+    public List<Route> getRoutesBetweenAirports(ToDoubleFunction<Route> routeFunction) {
         List<Route> routes;
         final int startIndex;
         final int endIndex;
@@ -139,42 +148,119 @@ public abstract class RouteService {
                 throw new Exception("No routes found in database.");
         } catch (Exception e) {
             LoggerService.log(Level.ERROR, e.getMessage());
-            return;
+            return List.of();
         }
 
-        // Distance graph
-        double[][] kmGraph = makeGraph(airports, routes, Route::getKm);
-        List<List<List<Integer>>> kmPaths = new ArrayList<>();
-        applyFloydWarshall(kmGraph, kmPaths);
+        double[][] graph = makeGraph(routes, routeFunction);
+        List<List<List<Integer>>> paths = new ArrayList<>();
+        applyFloydWarshall(graph, paths);
 
-        // Price graph
-        double[][] priceGraph = makeGraph(airports, routes, Route::getPrice);
-        List<List<List<Integer>>> pricePaths = new ArrayList<>();
-        applyFloydWarshall(priceGraph, pricePaths);
+        if (graph[startIndex][endIndex] == INF) {
+            LoggerService.consoleLog(Level.INFO, "No available path between the selected airports.");
+            return List.of();
+        }
 
-        if (kmGraph[startIndex][endIndex] == INF || priceGraph[startIndex][endIndex] == INF) {
+        List<Integer> pathAirportIndex = paths.get(startIndex).get(endIndex);
+
+        List<Route> pathRoutes = new ArrayList<>();
+        for (int i = 0; i < pathAirportIndex.size() - 1; i++) {
+            int fromIndex = pathAirportIndex.get(i);
+            int toIndex = pathAirportIndex.get(i + 1);
+
+            Airport airportFrom = airports.get(fromIndex);
+            Airport airportTo = airports.get(toIndex);
+
+            routes.stream()
+                    .filter(r -> r.getIdFrom() == airportFrom.getId() && r.getIdTo() == airportTo.getId())
+                    .min(Comparator.comparingDouble(routeFunction)).ifPresent(pathRoutes::add);
+        }
+
+        return pathRoutes;
+    }
+
+
+    /**
+     * Prints the details of a route path between two airports, including each segment's distance and price,
+     * as well as the total distance and total cost for the entire route.
+     * <p>
+     * If no route exists between the selected airports, a message is logged indicating the absence of a path.
+     * Each route segment is prefixed by a number for easy reference, displaying both departure and arrival
+     * airports for each segment.
+     *
+     * @param routePath The list of Route objects representing the path between the start and end airports.
+     */
+    public void printRouteDetails(List<Route> routePath) {
+        if (routePath.isEmpty()) {
             LoggerService.consoleLog(Level.INFO, "No available path between the selected airports.");
             return;
         }
 
-        // Shortest route
-        System.out.printf("Shortest route from %s to %s:\n", airports.get(startIndex).getName(), airports.get(endIndex).getName());
+        System.out.printf("Route from %s to %s:\n", start.getName(), end.getName());
 
-        List<Integer> shortestPathAirlineIndex = kmPaths.get(startIndex).get(endIndex);
-        System.out.println(shortestPathAirlineIndex.stream()
-                .map(index -> airports.get(index).getName() + " (" + kmGraph[startIndex][index] + " km)")
-                .collect(Collectors.joining(" -> "))
-                + '\n');
+        AtomicInteger index = new AtomicInteger(1);
+        String details = routePath.stream()
+                .map(route -> String.format(
+                        "%d - %s -> %s (%d km, $%.2f)",
+                        index.getAndIncrement(),
+                        findAirport(airports, route.getIdFrom()).getName(),
+                        findAirport(airports, route.getIdTo()).getName(),
+                        route.getKm(), route.getPrice()
+                ))
+                .collect(Collectors.joining("\n"));
 
+        System.out.println(details);
 
-        // Cheapest route
-        System.out.printf("Cheapest route from %s to %s:\n", airports.get(startIndex).getName(), airports.get(endIndex).getName());
-
-        List<Integer> cheapestPathAirlineIndex = pricePaths.get(startIndex).get(endIndex);
-        System.out.println(cheapestPathAirlineIndex.stream()
-                .map(index -> airports.get(index).getName() + " ($" + priceGraph[startIndex][index] + ")")
-                .collect(Collectors.joining(" -> "))
-                + '\n');
+        int totalKm = routePath.stream().mapToInt(Route::getKm).sum();
+        double totalPrice = routePath.stream().mapToDouble(Route::getPrice).sum();
+        System.out.printf("Total: %d km, $%.2f\n\n", totalKm, totalPrice);
     }
 
+    /**
+     * Finds an airport by its ID from a list of airports.
+     *
+     * @param airports  the list of available airports
+     * @param airportId the ID of the airport to find
+     * @return the Airport object with the specified ID
+     * @throws NoSuchElementException if no airport with the given ID is found
+     */
+    private static Airport findAirport(List<Airport> airports, int airportId) {
+        return airports.stream()
+                .filter(a -> a.getId() == airportId)
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("Airport not found"));
+    }
+
+    /**
+     * Saves the session details of the shortest and cheapest trip routes.
+     *
+     * @param shortestTripRoutes the list of routes forming the shortest trip
+     * @param cheapestTripRoutes the list of routes forming the cheapest trip
+     */
+    public void saveSession(List<Route> shortestTripRoutes, List<Route> cheapestTripRoutes) {
+        if (shortestTripRoutes.isEmpty() || cheapestTripRoutes.isEmpty()) {
+            LoggerService.consoleLog(Level.ERROR, "A Route list is empty.");
+            return;
+        }
+
+        List<String> shortestRoute = shortestTripRoutes.stream()
+                .map(r -> findAirport(airports, r.getIdFrom()).getName())
+                .collect(Collectors.toList());
+        shortestRoute.add(findAirport(airports, shortestTripRoutes.getLast().getIdTo()).getName());
+        double shortestDistance = shortestTripRoutes.stream().mapToInt(Route::getKm).sum();
+
+        List<String> cheapestRoute = cheapestTripRoutes.stream()
+                .map(r -> findAirport(airports, r.getIdFrom()).getName())
+                .collect(Collectors.toList());
+        cheapestRoute.add(findAirport(airports, cheapestTripRoutes.getLast().getIdTo()).getName());
+        double cheapestPrice = cheapestTripRoutes.stream().mapToDouble(Route::getPrice).sum();
+
+        // Log routes
+        SessionLogger sessionLogger = new SessionLogger();
+        sessionLogger.logRouteDetails(
+                String.join(" -> ", shortestRoute),
+                shortestDistance,
+                String.join(" -> ", cheapestRoute),
+                cheapestPrice
+        );
+    }
 }

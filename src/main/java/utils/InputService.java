@@ -21,13 +21,13 @@ public abstract class InputService {
     }
 
     /**
-     * Reads a Number from the user within a specified range. If utils.input is invalid, displays an error message and prompts again.
+     * Reads a Number from the user within a specified range. If input is invalid, displays an error message and prompts again.
      *
      * @param msg      the prompt message displayed to the user.
-     * @param errorMsg the error message displayed upon invalid utils.input.
+     * @param errorMsg the error message displayed upon invalid input.
      * @param min      the minimum allowable Number value.
      * @param max      the maximum allowable Number value.
-     * @return the validated Number utils.input within the specified range.
+     * @return the validated Number input within the specified range.
      */
   
     public static <T extends Number> T readNumber(String msg, String errorMsg, T min, T max, Class<T> clazz) {
@@ -74,33 +74,36 @@ public abstract class InputService {
     }
   
     /**
-     * Reads a character from the user that must be one of the specified allowed values. If utils.input is invalid, displays an error message and prompts again.
+     * Reads a character from the user that must be one of the specified allowed values. If input is invalid, displays an error message and prompts again.
      *
      * @param msg             the prompt message displayed to the user.
-     * @param errorMsg        the error message displayed upon invalid utils.input.
+     * @param errorMsg        the error message displayed upon invalid input.
      * @param availableValues the array of allowed characters.
-     * @return the validated character utils.input.
+     * @return the validated character input.
      */
     public static char readCharInValues(String msg, String errorMsg, char[] availableValues) {
         LoggerService.print(msg);
-        String next = SCANNER.next();
-        char inputChar = Character.toUpperCase(next.charAt(0));
+        char inputChar;
 
-        boolean containsRequiredValues = false;
-        boolean isChar = next.length() == 1;
+        while (true) {
+            try {
+                String input = SCANNER.nextLine().trim();
+                if (input.length() != 1)
+                    throw new IllegalArgumentException("Please enter a single character.");
 
-        while (!containsRequiredValues || !isChar) {
-            LoggerService.print(errorMsg);
-            next = SCANNER.next();
+                inputChar = Character.toUpperCase(input.charAt(0));
+                if (!ArrayUtils.contains(availableValues, inputChar))
+                    throw new IllegalArgumentException(errorMsg);
 
-            inputChar = Character.toUpperCase(next.charAt(0));
-            isChar = next.length() == 1;
-            containsRequiredValues = ArrayUtils.contains(availableValues, inputChar);
+                return inputChar;
+
+            } catch (IllegalArgumentException e) {
+                LoggerService.consoleLog(Level.WARN, e.getMessage());
+                LoggerService.print("Try again: ");
+            }
         }
-
-        SCANNER.nextLine(); //Cleans buffer
-        return inputChar;
     }
+
 
     /**
      * Reads a yes or no confirmation from the user, allowing only 'Y' or 'N' as valid inputs.
@@ -116,16 +119,16 @@ public abstract class InputService {
     }
   
     /**
-     * Reads a string from the user that must fall within specified length constraints. If utils.input is invalid, displays an error message and prompts again.
+     * Reads a string from the user that must fall within specified length constraints. If input is invalid, displays an error message and prompts again.
      *
      * @param msg       the prompt message displayed to the user.
      * @param minLength the minimum allowable length of the string.
      * @param maxLength the maximum allowable length of the string.
-     * @return the validated string utils.input within the specified length.
+     * @return the validated string input within the specified length.
      */
     public static String readString(String msg, int minLength, int maxLength) {
         LoggerService.print(msg);
-        String inputStr = "";
+        String inputStr;
         do {
             try {
                 inputStr = SCANNER.nextLine();
@@ -136,10 +139,6 @@ public abstract class InputService {
                 LoggerService.consoleLog(Level.WARN, e.getMessage());
                 inputStr = StringUtils.EMPTY;
                 LoggerService.print("Try again: ");
-            } catch(NullPointerException e) {
-                LoggerService.consoleLog(Level.FATAL, e.getMessage());
-                LoggerService.consoleLog(Level.FATAL, "Exiting program...");
-                exit(0);
             }
         } while (StringUtils.isEmpty(inputStr));
 
@@ -147,12 +146,12 @@ public abstract class InputService {
     }
   
     /**
-     * Reads a string from the user that must match one of the specified allowed values. If utils.input is invalid, displays an error message and prompts again.
+     * Reads a string from the user that must match one of the specified allowed values. If input is invalid, displays an error message and prompts again.
      *
      * @param msg             the prompt message displayed to the user.
-     * @param errorMsg        the error message displayed upon invalid utils.input.
+     * @param errorMsg        the error message displayed upon invalid input.
      * @param availableValues the array of allowed strings.
-     * @return the validated string utils.input.
+     * @return the validated string input.
      */
     public static String readString(String msg, String errorMsg, String[] availableValues) {
         LoggerService.print(msg);
@@ -168,12 +167,12 @@ public abstract class InputService {
     }
   
     /**
-     * Reads a string from the user that must satisfy a specified condition. If utils.input is invalid, displays an error message and prompts again.
+     * Reads a string from the user that must satisfy a specified condition. If input is invalid, displays an error message and prompts again.
      *
      * @param msg       the prompt message displayed to the user.
-     * @param errorMsg  the error message displayed upon invalid utils.input.
-     * @param condition a predicate defining the validation condition for the utils.input.
-     * @return the validated string utils.input.
+     * @param errorMsg  the error message displayed upon invalid input.
+     * @param condition a predicate defining the validation condition for the input.
+     * @return the validated string input.
      */
     public static String readString(String msg, String errorMsg, Predicate<String> condition) {
         LoggerService.print(msg);
@@ -227,9 +226,9 @@ public abstract class InputService {
     }
   
     /**
-     * Reads a date from the user by prompting for year, month, and day, or allows using the current date. Validates and returns the utils.input date.
+     * Reads a date from the user by prompting for year, month, and day, or allows using the current date. Validates and returns the input date.
      *
-     * @return the validated LocalDate utils.input by the user or the current date if chosen.
+     * @return the validated LocalDate input by the user or the current date if chosen.
      */
     public static LocalDate readValidDate() {
         int year = 0, month = 0, day = 0;
