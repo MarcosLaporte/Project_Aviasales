@@ -10,20 +10,28 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 
-public abstract class RouteService {
+public final class RouteService {
 
     public static final Double INF = Double.POSITIVE_INFINITY;
+    private final List<Airport> airports;
+    private final Airport start;
+    private final Airport end;
+
+    public RouteService(List<Airport> airports, Airport start, Airport end) {
+        this.airports = airports;
+        this.start = start;
+        this.end = end;
+    }
 
     /**
      * Creates the graph with every row and column as a destination, having te direct distance between them as
      * the value inside the matrix, if there is none is INF, the index are align with the list sent by param
      * for example airports.get(0) is the row 0 in the matrix
      *
-     * @param airports List of airports to be represented in the graph.
-     * @param routes   List of routes connecting airports with distances.
+     * @param routes List of routes connecting airports with distances.
      * @return A matrix representing the distances between each airport pair.
      */
-    private static double[][] makeGraph(List<Airport> airports, List<Route> routes, ToDoubleFunction<Route> function) {
+    private double[][] makeGraph(List<Route> routes, ToDoubleFunction<Route> function) {
         final int size = airports.size();
         double[][] graph = new double[size][size];
 
@@ -119,13 +127,10 @@ public abstract class RouteService {
      * between shortest and cheapest paths through the `routeFunction` parameter.
      * If no path exists between the airports, an empty list is returned.
      *
-     * @param start         The starting airport for the route.
-     * @param end           The destination airport for the route.
-     * @param airports      A list of available airports to reference for indices in the graph.
      * @param routeFunction A function defining the metric for route calculation (e.g., Route::getKm for distance, Route::getPrice for cost).
      * @return A list of Route objects representing the optimal path between the start and end airports, or an empty list if no route exists.
      */
-    public static List<Route> getRoutesBetweenAirports(Airport start, Airport end, List<Airport> airports, ToDoubleFunction<Route> routeFunction) {
+    public List<Route> getRoutesBetweenAirports(ToDoubleFunction<Route> routeFunction) {
         List<Route> routes;
         final int startIndex;
         final int endIndex;
@@ -146,7 +151,7 @@ public abstract class RouteService {
             return List.of();
         }
 
-        double[][] graph = makeGraph(airports, routes, routeFunction);
+        double[][] graph = makeGraph(routes, routeFunction);
         List<List<List<Integer>>> paths = new ArrayList<>();
         applyFloydWarshall(graph, paths);
 
@@ -183,11 +188,8 @@ public abstract class RouteService {
      * airports for each segment.
      *
      * @param routePath The list of Route objects representing the path between the start and end airports.
-     * @param start     The starting airport for the route.
-     * @param end       The destination airport for the route.
-     * @param airports  The list of all available airports, used to retrieve airport names based on route information.
      */
-    public static void printRouteDetails(List<Route> routePath, Airport start, Airport end, List<Airport> airports) {
+    public void printRouteDetails(List<Route> routePath) {
         if (routePath.isEmpty()) {
             LoggerService.consoleLog(Level.INFO, "No available path between the selected airports.");
             return;

@@ -65,31 +65,13 @@ public class MainMenu {
             airports.add(chosenAirports.getLast()); // Put back selected airports
             LoggerService.println(chosenAirports.getFirst() + " -> " + chosenAirports.get(1));
 
-            List<Route> shortestRoutes = RouteService.getRoutesBetweenAirports(
-                    chosenAirports.getFirst(),
-                    chosenAirports.getLast(),
-                    airports, Route::getKm
-            );
 
-            RouteService.printRouteDetails(
-                    shortestRoutes,
-                    chosenAirports.getFirst(),
-                    chosenAirports.getLast(),
-                    airports
-            );
+            final RouteService routeService = new RouteService(airports, chosenAirports.getFirst(), chosenAirports.getLast());
+            List<Route> shortestRoutes = routeService.getRoutesBetweenAirports(Route::getKm);
+            routeService.printRouteDetails(shortestRoutes);
 
-            List<Route> cheapestRoutes = RouteService.getRoutesBetweenAirports(
-                    chosenAirports.getFirst(),
-                    chosenAirports.getLast(),
-                    airports, Route::getPrice
-            );
-
-            RouteService.printRouteDetails(
-                    cheapestRoutes,
-                    chosenAirports.getFirst(),
-                    chosenAirports.getLast(),
-                    airports
-            );
+            List<Route> cheapestRoutes = routeService.getRoutesBetweenAirports(Route::getPrice);
+            routeService.printRouteDetails(cheapestRoutes);
 
             int chosenTrip = InputService.readCharInValues(
                     "Select final trip. Shortest (1) or Cheapest (2): ",
