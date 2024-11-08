@@ -9,7 +9,7 @@ import entities.annotations.Range;
 import java.time.LocalDate;
 
 @JsonPropertyOrder({"id", "passId", "routeId", "date"})
-public class Trip {
+public class Trip implements Entity {
     @Column(name = "id")
     @Range(min = 101)
     private int id;
