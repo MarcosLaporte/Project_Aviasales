@@ -1,0 +1,22 @@
+DEBUG - Logging initialized using 'class org.apache.ibatis.logging.log4j2.Log4j2Impl' adapter.
+DEBUG - PooledDataSource forcefully closed/removed all connections.
+DEBUG - PooledDataSource forcefully closed/removed all connections.
+DEBUG - PooledDataSource forcefully closed/removed all connections.
+DEBUG - PooledDataSource forcefully closed/removed all connections.
+DEBUG - Opening JDBC Connection
+DEBUG - Created connection 889928215.
+DEBUG - Setting autocommit to false on JDBC Connection [com.mysql.cj.jdbc.ConnectionImpl@350b3a17]
+DEBUG - PooledDataSource forcefully closed/removed all connections.
+DEBUG - PooledDataSource forcefully closed/removed all connections.
+DEBUG - PooledDataSource forcefully closed/removed all connections.
+DEBUG - PooledDataSource forcefully closed/removed all connections.
+DEBUG - Opening JDBC Connection
+DEBUG - Created connection 778337881.
+DEBUG - Setting autocommit to false on JDBC Connection [com.mysql.cj.jdbc.ConnectionImpl@2e647e59]
+DEBUG - Resetting autocommit to true on JDBC Connection [com.mysql.cj.jdbc.ConnectionImpl@2e647e59]
+DEBUG - Closing JDBC Connection [com.mysql.cj.jdbc.ConnectionImpl@2e647e59]
+DEBUG - Returned connection 778337881 to pool.
+DEBUG - PooledDataSource forcefully closed/removed all connections.
+DEBUG - Resetting autocommit to true on JDBC Connection [com.mysql.cj.jdbc.ConnectionImpl@350b3a17]
+DEBUG - Closing JDBC Connection [com.mysql.cj.jdbc.ConnectionImpl@350b3a17]
+DEBUG - Returned connection 889928215 to pool.

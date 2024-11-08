@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%n%-5p - %m%n"/>
+        </Console>
+
+        <File name="FileLogger" fileName="logs/app.log">
+            <PatternLayout pattern="%-5p - %m%n"/>
+        </File>
+
+        <Console name="PlainConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="%msg"/>
+        </Console>
+
+        <File name="SqlSessionFileLogger" fileName="logs/sqlSession.log" append="false">
+            <PatternLayout pattern="%-5p - %m%n"/>
+        </File>
+
+    </Appenders>
+
+    <Loggers>
+        <Logger name="ConsoleLogger" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <Logger name="FileOnlyLogger" level="info" additivity="false">
+            <AppenderRef ref="FileLogger"/>
+        </Logger>
+
+        <Logger name="Sout" level="info" additivity="false">
+            <AppenderRef ref="PlainConsoleAppender"/>
+        </Logger>
+
+        <Logger name="org.apache.ibatis" level="debug" additivity="false">
+            <AppenderRef ref="SqlSessionFileLogger"/>
+        </Logger>
+
+        <Root level="debug">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileLogger"/>
+        </Root>
+    </Loggers>
+</Configuration>
