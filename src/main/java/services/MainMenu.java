@@ -42,49 +42,17 @@ public class MainMenu {
             LoggerService.consoleLog(Level.INFO, "Welcome, " + currentPassenger.getFullName());
 
             List<Airport> airports = airportDao.get();
-            SelectionMenuView<Airport> airportsView = new SelectionMenuView<>(airports)
-                    .setElementConsumer((Airport a, Integer index) -> System.out.printf("%d. %s\n", index, a))
-                    .setMenuMessage("Select a departure airport: ");
+            List<Airport> chosenAirports = selectAirports(airports);
 
-            final List<Airport> chosenAirports = new ArrayList<>();
-
-            ListMenuHandler<Airport> airportMenuHandler = new ListMenuHandler<>(airportsView)
-                    .setOptionConsumer((a, _) -> {
-                        chosenAirports.add(a);
-                        airports.remove(a); // Remove selected airport to avoid duplicate selection
-                    });
-
-            airportMenuHandler.processMenuOption(); // Departure
-
-            airportsView
-                    .setOptions(airports) // Update items list
-                    .setMenuMessage("Select destination: ");
-            airportMenuHandler.processMenuOption(); // Arrival
-
-            airports.add(chosenAirports.getFirst()); // Put back selected airports
-            airports.add(chosenAirports.getLast()); // Put back selected airports
-            LoggerService.println(chosenAirports.getFirst() + " -> " + chosenAirports.get(1));
-
-
-            final RouteService routeService = new RouteService(airports, chosenAirports.getFirst(), chosenAirports.getLast());
+            RouteService routeService = new RouteService(airports, chosenAirports.get(0), chosenAirports.get(1));
             List<Route> shortestRoutes = routeService.getRoutesBetweenAirports(Route::getKm);
-            routeService.printRouteDetails(shortestRoutes);
-
             List<Route> cheapestRoutes = routeService.getRoutesBetweenAirports(Route::getPrice);
+
+            routeService.printRouteDetails(shortestRoutes);
             routeService.printRouteDetails(cheapestRoutes);
 
-            int chosenTrip = InputService.readCharInValues(
-                    "Select final trip. Shortest (1) or Cheapest (2): ",
-                    "Invalid value. Try again (1-2): ",
-                    new char[]{'1', '2'}
-            );
-            final List<Route> chosenRoutes = chosenTrip == '1' ? shortestRoutes : cheapestRoutes;
-            for (int i = 0; i < chosenRoutes.size(); i++) {
-                Route route = chosenRoutes.get(i);
-                LocalDate date = LocalDate.now().plusDays(i);
-                Trip trip = new Trip(currentPassenger.getId(), route.getId(), date);
-                tripDao.create(trip);
-            }
+            List<Route> chosenRoutes = chooseFinalTrip(shortestRoutes, cheapestRoutes);
+            saveTripToDatabase(tripDao, currentPassenger, chosenRoutes);
 
             LoggerService.consoleLog(Level.INFO, "Trip saved to database!");
         } catch (IOException e) {
@@ -115,4 +83,49 @@ public class MainMenu {
             throw new RuntimeException(e);
         }
     }
+
+    private static List<Airport> selectAirports(List<Airport> airports) {
+        SelectionMenuView<Airport> airportsView = new SelectionMenuView<>(airports)
+                .setElementConsumer((Airport a, Integer index) -> System.out.printf("%d. %s\n", index, a))
+                .setMenuMessage("Select a departure airport: ");
+        List<Airport> chosenAirports = new ArrayList<>();
+
+        ListMenuHandler<Airport> airportMenuHandler = new ListMenuHandler<>(airportsView)
+                .setOptionConsumer((a, _) -> {
+                    chosenAirports.add(a);
+                    airports.remove(a);
+                });
+
+        airportMenuHandler.processMenuOption(); // Departure
+
+        airportsView
+                .setOptions(airports)
+                .setMenuMessage("Select destination: ");
+        airportMenuHandler.processMenuOption(); // Arrival
+
+        airports.add(chosenAirports.get(0)); // Add back selected airports
+        airports.add(chosenAirports.get(1));
+
+        LoggerService.println(chosenAirports.get(0) + " -> " + chosenAirports.get(1));
+        return chosenAirports;
+    }
+
+    private static List<Route> chooseFinalTrip(List<Route> shortestRoutes, List<Route> cheapestRoutes) {
+        int chosenTrip = InputService.readCharInValues(
+                "Select final trip. Shortest (1) or Cheapest (2): ",
+                "Invalid value. Try again (1-2): ",
+                new char[]{'1', '2'}
+        );
+        return chosenTrip == '1' ? shortestRoutes : cheapestRoutes;
+    }
+
+    private static void saveTripToDatabase(MyBatis<Trip> tripDao, Passenger currentPassenger, List<Route> chosenRoutes) {
+        for (int i = 0; i < chosenRoutes.size(); i++) {
+            Route route = chosenRoutes.get(i);
+            LocalDate date = LocalDate.now().plusDays(i);
+            Trip trip = new Trip(currentPassenger.getId(), route.getId(), date);
+            tripDao.create(trip);
+        }
+    }
+
 }
