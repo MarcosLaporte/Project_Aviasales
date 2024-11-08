@@ -16,6 +16,18 @@
         <File name="SqlSessionFileLogger" fileName="logs/sqlSession.log" append="false">
             <PatternLayout pattern="%-5p - %m%n"/>
         </File>
+
+        <File name="StringInputLogger" fileName="logs/StringInput.log">
+            <PatternLayout pattern="%-5p - %m%n"/>
+        </File>
+
+        <File name="MenuHandlerLogger" fileName="logs/MenuHandler.log">
+            <PatternLayout pattern="%-5p - %m%n"/>
+        </File>
+
+        <File name="ViewLogger" fileName="logs/View.log">
+            <PatternLayout pattern="%-5p - %m%n"/>
+        </File>
     </Appenders>
 
     <Loggers>
@@ -34,6 +46,15 @@
         <Logger name="org.apache.ibatis" level="debug" additivity="false">
             <AppenderRef ref="SqlSessionFileLogger"/>
         </Logger>
+
+        <Logger name="utils.input.single_input.StringInput" level="debug" additivity="false">
+            <AppenderRef ref="SqlSessionFileLogger"/>
+        </Logger>
+
+        <Logger name="view.general.View" level="debug" additivity="false">
+            <AppenderRef ref="SqlSessionFileLogger"/>
+        </Logger>
+
 
         <Root level="debug">
             <AppenderRef ref="Console"/>

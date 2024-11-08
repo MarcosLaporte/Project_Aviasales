@@ -1,0 +1,402 @@
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes WHERE km = ? ;
+DEBUG - ==> Parameters: 10(Integer)
+DEBUG - <==      Total: 0
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+ERROR - Index 0 out of bounds for length 0
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+ERROR - Index 0 out of bounds for length 0
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+ERROR - Cannot invoke "services.IDao.get(java.util.Map)" because "airportsDAO" is null
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 10
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+ERROR - 
+### Error querying database.  Cause: java.sql.SQLException: No suitable driver found for ${URL}
+### The error may exist in mappers/airportMapper.xml
+### The error may involve entities.Airport.get
+### The error occurred while executing a query
+### Cause: java.sql.SQLException: No suitable driver found for ${URL}
+ERROR - 
+### Error querying database.  Cause: java.sql.SQLException: No suitable driver found for ${URL}
+### The error may exist in mappers/routeMapper.xml
+### The error may involve entities.Route.get
+### The error occurred while executing a query
+### Cause: java.sql.SQLException: No suitable driver found for ${URL}
+ERROR - 
+### Error querying database.  Cause: java.sql.SQLException: No suitable driver found for ${URL}
+### The error may exist in mappers/airportMapper.xml
+### The error may involve entities.Airport.get
+### The error occurred while executing a query
+### Cause: java.sql.SQLException: No suitable driver found for ${URL}
+ERROR - 
+### Error querying database.  Cause: java.sql.SQLException: No suitable driver found for ${URL}
+### The error may exist in mappers/routeMapper.xml
+### The error may involve entities.Route.get
+### The error occurred while executing a query
+### Cause: java.sql.SQLException: No suitable driver found for ${URL}
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM routes ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 11
+DEBUG - ==>  Preparing: SELECT * FROM airports ;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
