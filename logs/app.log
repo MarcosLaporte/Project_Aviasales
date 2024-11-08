@@ -703,3 +703,111 @@ DEBUG - ==> Parameters:
 DEBUG - <==      Total: 11
 DEBUG - Menu option selected: 5
 
+INFO  - Entering show
+INFO  - Checking if selectionMenuView is null
+INFO  - Displaying menu view
+INFO  - Retrieving input from user.
+DEBUG - ==>  Preparing: SELECT * FROM airlines WHERE name = ? ORDER BY id;
+DEBUG - ==> Parameters: j(String)
+DEBUG - <==      Total: 0
+ERROR - Some random error
+INFO  - Entering show
+INFO  - Checking if selectionMenuView is null
+INFO  - Displaying menu view
+INFO  - Retrieving input from user.
+DEBUG - ==>  Preparing: SELECT * FROM airlines ORDER BY id;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 4
+ERROR - Some random error
+INFO  - Entering show
+INFO  - Checking if selectionMenuView is null
+INFO  - Displaying menu view
+INFO  - Retrieving input from user.
+DEBUG - ==>  Preparing: SELECT * FROM airports ORDER BY id;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+ERROR - Some random error
+INFO  - Entering show
+INFO  - Checking if selectionMenuView is null
+INFO  - Displaying menu view
+INFO  - Retrieving input from user.
+DEBUG - ==>  Preparing: SELECT * FROM routes ORDER BY id;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 13
+ERROR - Some random error
+INFO  - Entering show
+INFO  - Checking if selectionMenuView is null
+INFO  - Displaying menu view
+INFO  - Retrieving input from user.
+DEBUG - ==>  Preparing: SELECT * FROM trips ORDER BY id;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 9
+ERROR - Some random error
+INFO  - Entering show
+INFO  - Checking if selectionMenuView is null
+INFO  - Displaying menu view
+INFO  - Retrieving input from user.
+DEBUG - ==>  Preparing: SELECT * FROM passengers ORDER BY id;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM airports ORDER BY id;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+INFO  - Entering show
+INFO  - Checking if selectionMenuView is null
+INFO  - Displaying menu view
+INFO  - Retrieving input from user.
+ERROR - Some random error
+INFO  - Exiting show
+INFO  - Entering show
+INFO  - Checking if selectionMenuView is null
+INFO  - Displaying menu view
+INFO  - Retrieving input from user.
+ERROR - Some random error
+INFO  - Exiting show
+DEBUG - ==>  Preparing: SELECT * FROM routes ORDER BY id;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 13
+DEBUG - ==>  Preparing: SELECT * FROM routes ORDER BY id;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 13
+DEBUG - ==>  Preparing: INSERT INTO trips (pass_id, route_id, date) VALUES (?, ?, ?);
+DEBUG - ==> Parameters: 5(Integer), 1006(Integer), 2024-11-08(LocalDate)
+DEBUG - <==    Updates: 1
+ERROR - Some random error
+INFO  - Entering show
+INFO  - Checking if selectionMenuView is null
+INFO  - Displaying menu view
+INFO  - Retrieving input from user.
+DEBUG - ==>  Preparing: SELECT * FROM passengers ORDER BY id;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+DEBUG - ==>  Preparing: SELECT * FROM airports ORDER BY id;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 5
+INFO  - Entering show
+INFO  - Checking if selectionMenuView is null
+INFO  - Displaying menu view
+INFO  - Retrieving input from user.
+ERROR - Some random error
+INFO  - Exiting show
+INFO  - Entering show
+INFO  - Checking if selectionMenuView is null
+INFO  - Displaying menu view
+INFO  - Retrieving input from user.
+ERROR - Some random error
+INFO  - Exiting show
+DEBUG - ==>  Preparing: SELECT * FROM routes ORDER BY id;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 13
+DEBUG - ==>  Preparing: SELECT * FROM routes ORDER BY id;
+DEBUG - ==> Parameters: 
+DEBUG - <==      Total: 13
+DEBUG - ==>  Preparing: INSERT INTO trips (pass_id, route_id, date) VALUES (?, ?, ?);
+DEBUG - ==> Parameters: 5(Integer), 1007(Integer), 2024-11-08(LocalDate)
+DEBUG - <==    Updates: 1
+ERROR - Some random error
+INFO  - Entering show
+INFO  - Checking if selectionMenuView is null
+INFO  - Displaying menu view
+INFO  - Retrieving input from user.

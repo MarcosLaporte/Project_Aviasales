@@ -22,4 +22,20 @@
     "shortest_route" : "Tokyo Airport -> Cancun Airport -> Los Angeles International Airport -> JFK International Airport",
     "cheapest_route" : "Tokyo Airport -> Los Angeles International Airport -> JFK International Airport"
   }
+}, {
+  "start_time" : "2024-11-08 12:52:58",
+  "route_details" : {
+    "shortest_distance_km" : 4000.0,
+    "cheapest_price" : 420.0,
+    "shortest_route" : "JFK International Airport -> Los Angeles International Airport",
+    "cheapest_route" : "JFK International Airport -> Los Angeles International Airport"
+  }
+}, {
+  "start_time" : "2024-11-08 12:53:27",
+  "route_details" : {
+    "shortest_distance_km" : 4000.0,
+    "cheapest_price" : 1400.0,
+    "shortest_route" : "Los Angeles International Airport -> JFK International Airport",
+    "cheapest_route" : "Los Angeles International Airport -> Tokyo Airport -> Cancun Airport -> Ezeiza Airport -> JFK International Airport"
+  }
 } ]
