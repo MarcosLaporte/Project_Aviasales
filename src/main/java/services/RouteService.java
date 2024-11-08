@@ -215,6 +215,14 @@ public final class RouteService {
         System.out.printf("Total: %d km, $%.2f\n\n", totalKm, totalPrice);
     }
 
+    /**
+     * Finds an airport by its ID from a list of airports.
+     *
+     * @param airports  the list of available airports
+     * @param airportId the ID of the airport to find
+     * @return the Airport object with the specified ID
+     * @throws NoSuchElementException if no airport with the given ID is found
+     */
     private static Airport findAirport(List<Airport> airports, int airportId) {
         return airports.stream()
                 .filter(a -> a.getId() == airportId)
@@ -222,58 +230,37 @@ public final class RouteService {
                 .orElseThrow(() -> new NoSuchElementException("Airport not found"));
     }
 
-    /*public static void printRouteBetweenAirports(int startIndex, int endIndex, List<Airport> airports) {
-        List<Route> routes = getRoutes();
-        if (routes.isEmpty()) {
-            LoggerService.log(Level.ERROR, "No routes found in database.");
+    /**
+     * Saves the session details of the shortest and cheapest trip routes.
+     *
+     * @param shortestTripRoutes the list of routes forming the shortest trip
+     * @param cheapestTripRoutes the list of routes forming the cheapest trip
+     */
+    public void saveSession(List<Route> shortestTripRoutes, List<Route> cheapestTripRoutes) {
+        if (shortestTripRoutes.isEmpty() || cheapestTripRoutes.isEmpty()) {
+            LoggerService.consoleLog(Level.ERROR, "A Route list is empty.");
             return;
         }
 
-        double[][] kmGraph = makeKmGraph(airports, routes);
-        int[][] kmParent;
-        List<List<List<Integer>>> kmPaths = new ArrayList<>();
+        List<String> shortestRoute = shortestTripRoutes.stream()
+                .map(r -> findAirport(airports, r.getIdFrom()).getName())
+                .collect(Collectors.toList());
+        shortestRoute.add(findAirport(airports, shortestTripRoutes.getLast().getIdTo()).getName());
+        double shortestDistance = shortestTripRoutes.stream().mapToInt(Route::getKm).sum();
 
-        kmParent = initializeParentArray(kmGraph, kmPaths);
-        applyFloydWarshall(kmGraph, kmParent, kmPaths);
-
-        double[][] priceGraph = makePriceGraph(airports, routes);
-        int[][] priceParent;
-        List<List<List<Integer>>> pricePaths = new ArrayList<>();
-
-        priceParent = initializeParentArray(priceGraph, pricePaths);
-        applyFloydWarshall(priceGraph, priceParent, pricePaths);
-
-        SessionLogger sessionLogger = new SessionLogger();
-        String shortestRoute = null;
-        String cheapestRoute = null;
-        double shortestDistance = 0;
-        double cheapestPrice = 0;
-
-        if (startIndex != endIndex && kmGraph[startIndex][endIndex] < INF) {
-            shortestRoute = kmPaths.get(startIndex).get(endIndex)
-                    .stream().map(index -> airports.get(index).getName())
-                    .collect(Collectors.joining(" -> "));
-            shortestDistance = kmGraph[startIndex][endIndex];
-            System.out.println("Shortest path from " + airports.get(startIndex).getName() +
-                    " to " + airports.get(endIndex).getName() + ": " + shortestRoute +
-                    " (Distance: " + shortestDistance + " km)");
-        } else {
-            System.out.println("No available path between the selected airports by distance.");
-        }
-
-        if (startIndex != endIndex && priceGraph[startIndex][endIndex] < INF) {
-            cheapestRoute = pricePaths.get(startIndex).get(endIndex)
-                    .stream().map(index -> airports.get(index).getName())
-                    .collect(Collectors.joining(" -> "));
-            cheapestPrice = priceGraph[startIndex][endIndex];
-            System.out.println("Cheapest path from " + airports.get(startIndex).getName() +
-                    " to " + airports.get(endIndex).getName() + ": " + cheapestRoute +
-                    " (Price: $" + cheapestPrice + ")");
-        } else {
-            System.out.println("No available path between the selected airports by price.");
-        }
+        List<String> cheapestRoute = cheapestTripRoutes.stream()
+                .map(r -> findAirport(airports, r.getIdFrom()).getName())
+                .collect(Collectors.toList());
+        cheapestRoute.add(findAirport(airports, cheapestTripRoutes.getLast().getIdTo()).getName());
+        double cheapestPrice = cheapestTripRoutes.stream().mapToDouble(Route::getPrice).sum();
 
         // Log routes
-        sessionLogger.logRouteDetails(shortestRoute, shortestDistance, cheapestRoute, cheapestPrice);
-    }*/
+        SessionLogger sessionLogger = new SessionLogger();
+        sessionLogger.logRouteDetails(
+                String.join(" -> ", shortestRoute),
+                shortestDistance,
+                String.join(" -> ", cheapestRoute),
+                cheapestPrice
+        );
+    }
 }

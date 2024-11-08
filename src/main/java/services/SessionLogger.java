@@ -3,7 +3,9 @@ package services;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import entities.Airport;
+import org.apache.logging.log4j.Level;
+import utils.LoggerService;
+
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -42,7 +44,7 @@ public class SessionLogger {
     }
 
     private void appendSessionToLogFile() {
-        List<Map<String, Object>> sessions;
+        List<Map<String, Object>> sessions = new ArrayList<>();
         File file = new File(LOG_FILE_PATH);
 
 
@@ -50,20 +52,18 @@ public class SessionLogger {
             try {
                 sessions = mapper.readValue(file, new TypeReference<List<Map<String, Object>>>() {});
             } catch (IOException e) {
-                System.err.println("Error reading log file: " + e.getMessage());
+                LoggerService.consoleLog(Level.ERROR, "Error reading log file: " + e.getMessage());
                 sessions = new ArrayList<>();
             }
-        } else {
-            sessions = new ArrayList<>();
         }
 
-
         sessions.add(currentSession);
+
         try {
             ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
             writer.writeValue(file, sessions);
         } catch (IOException e) {
-            System.err.println("Error writing to log file: " + e.getMessage());
+            LoggerService.consoleLog(Level.ERROR, "Error writing to log file: " + e.getMessage());
         }
     }
 }

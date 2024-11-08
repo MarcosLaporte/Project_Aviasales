@@ -55,6 +55,7 @@ public class MainMenu {
             saveTripToDatabase(tripDao, currentPassenger, chosenRoutes);
 
             LoggerService.consoleLog(Level.INFO, "Trip saved to database!");
+            routeService.saveSession(shortestRoutes, cheapestRoutes);
         } catch (IOException e) {
             LoggerService.consoleLog(Level.ERROR, e.getMessage());
         }
