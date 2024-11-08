@@ -83,24 +83,27 @@ public abstract class InputService {
      */
     public static char readCharInValues(String msg, String errorMsg, char[] availableValues) {
         LoggerService.print(msg);
-        String next = SCANNER.next();
-        char inputChar = Character.toUpperCase(next.charAt(0));
+        char inputChar;
 
-        boolean containsRequiredValues = false;
-        boolean isChar = next.length() == 1;
+        while (true) {
+            try {
+                String input = SCANNER.nextLine().trim();
+                if (input.length() != 1)
+                    throw new IllegalArgumentException("Please enter a single character.");
 
-        while (!containsRequiredValues || !isChar) {
-            LoggerService.print(errorMsg);
-            next = SCANNER.next();
+                inputChar = Character.toUpperCase(input.charAt(0));
+                if (!ArrayUtils.contains(availableValues, inputChar))
+                    throw new IllegalArgumentException(errorMsg);
 
-            inputChar = Character.toUpperCase(next.charAt(0));
-            isChar = next.length() == 1;
-            containsRequiredValues = ArrayUtils.contains(availableValues, inputChar);
+                return inputChar;
+
+            } catch (IllegalArgumentException e) {
+                LoggerService.consoleLog(Level.WARN, e.getMessage());
+                LoggerService.print("Try again: ");
+            }
         }
-
-        SCANNER.nextLine(); //Cleans buffer
-        return inputChar;
     }
+
 
     /**
      * Reads a yes or no confirmation from the user, allowing only 'Y' or 'N' as valid inputs.
@@ -125,7 +128,7 @@ public abstract class InputService {
      */
     public static String readString(String msg, int minLength, int maxLength) {
         LoggerService.print(msg);
-        String inputStr = "";
+        String inputStr;
         do {
             try {
                 inputStr = SCANNER.nextLine();
@@ -136,10 +139,6 @@ public abstract class InputService {
                 LoggerService.consoleLog(Level.WARN, e.getMessage());
                 inputStr = StringUtils.EMPTY;
                 LoggerService.print("Try again: ");
-            } catch(NullPointerException e) {
-                LoggerService.consoleLog(Level.FATAL, e.getMessage());
-                LoggerService.consoleLog(Level.FATAL, "Exiting program...");
-                exit(0);
             }
         } while (StringUtils.isEmpty(inputStr));
 
