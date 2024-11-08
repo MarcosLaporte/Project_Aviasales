@@ -41,7 +41,7 @@ public class MainMenu {
                     }
                 });
 
-        mainMenu.processMenuOption();
+        mainMenu.show();
     }
 
     private static <T extends Entity> void createEntity(Class<T> clazz) {
@@ -73,12 +73,12 @@ public class MainMenu {
                         airports.remove(a); // Remove selected airport to avoid duplicate selection
                     });
 
-            airportMenuHandler.processMenuOption(); // Departure
+            airportMenuHandler.show(); // Departure
 
             airportsView
                     .setOptions(airports) // Update items list
                     .setMenuMessage("Select destination: ");
-            airportMenuHandler.processMenuOption(); // Arrival
+            airportMenuHandler.show(); // Arrival
 
             airports.add(chosenAirports.getFirst()); // Put back selected airports
             airports.add(chosenAirports.getLast()); // Put back selected airports
