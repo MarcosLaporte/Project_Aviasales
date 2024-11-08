@@ -138,9 +138,9 @@ public abstract class RouteService {
         List<Route> routes = getRoutes();
         if (routes.isEmpty()) {
             LoggerService.log(Level.ERROR, "No routes found in database.");
+            return;
         }
 
-        // distance graph
         double[][] kmGraph = makeKmGraph(airports, routes);
         int[][] kmParent;
         List<List<List<Integer>>> kmPaths = new ArrayList<>();
@@ -148,7 +148,6 @@ public abstract class RouteService {
         kmParent = initializeParentArray(kmGraph, kmPaths);
         applyFloydWarshall(kmGraph, kmParent, kmPaths);
 
-        // price graph
         double[][] priceGraph = makePriceGraph(airports, routes);
         int[][] priceParent;
         List<List<List<Integer>>> pricePaths = new ArrayList<>();
@@ -156,29 +155,39 @@ public abstract class RouteService {
         priceParent = initializeParentArray(priceGraph, pricePaths);
         applyFloydWarshall(priceGraph, priceParent, pricePaths);
 
-        // shortest route
+        SessionLogger sessionLogger = new SessionLogger();
+        String shortestRoute = null;
+        String cheapestRoute = null;
+        double shortestDistance = 0;
+        double cheapestPrice = 0;
+
         if (startIndex != endIndex && kmGraph[startIndex][endIndex] < INF) {
-            System.out.println("Shortest path from " + airports.get(startIndex).getName() +
-                    " to " + airports.get(endIndex).getName() + ":");
-            System.out.println(kmPaths.get(startIndex).get(endIndex)
+            shortestRoute = kmPaths.get(startIndex).get(endIndex)
                     .stream().map(index -> airports.get(index).getName())
-                    .collect(Collectors.joining(" -> ")));
-            System.out.println(" (Distance: " + kmGraph[startIndex][endIndex] + " km)");
+                    .collect(Collectors.joining(" -> "));
+            shortestDistance = kmGraph[startIndex][endIndex];
+            System.out.println("Shortest path from " + airports.get(startIndex).getName() +
+                    " to " + airports.get(endIndex).getName() + ": " + shortestRoute +
+                    " (Distance: " + shortestDistance + " km)");
         } else {
             System.out.println("No available path between the selected airports by distance.");
         }
 
-        // Cheapest route
         if (startIndex != endIndex && priceGraph[startIndex][endIndex] < INF) {
-            System.out.println("Cheapest path from " + airports.get(startIndex).getName() +
-                    " to " + airports.get(endIndex).getName() + ":");
-            System.out.println(pricePaths.get(startIndex).get(endIndex)
+            cheapestRoute = pricePaths.get(startIndex).get(endIndex)
                     .stream().map(index -> airports.get(index).getName())
-                    .collect(Collectors.joining(" -> ")));
-            System.out.println(" (Price: $" + priceGraph[startIndex][endIndex] + ")");
+                    .collect(Collectors.joining(" -> "));
+            cheapestPrice = priceGraph[startIndex][endIndex];
+            System.out.println("Cheapest path from " + airports.get(startIndex).getName() +
+                    " to " + airports.get(endIndex).getName() + ": " + cheapestRoute +
+                    " (Price: $" + cheapestPrice + ")");
         } else {
             System.out.println("No available path between the selected airports by price.");
         }
+
+        // Log routes
+        sessionLogger.logRouteDetails(shortestRoute, shortestDistance, cheapestRoute, cheapestPrice);
     }
+
 
 }
