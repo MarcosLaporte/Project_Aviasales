@@ -30,7 +30,7 @@ public class MainMenu {
                         CrudMenu.handleCrudOperation(e);
                 });
 
-        mainMenu.processMenuOption();
+        mainMenu.show();
     }
 
     private static void handleNewTrip() {
@@ -97,12 +97,12 @@ public class MainMenu {
                     airports.remove(a);
                 });
 
-        airportMenuHandler.processMenuOption(); // Departure
+        airportMenuHandler.show(); // Departure
 
         airportsView
                 .setOptions(airports)
                 .setMenuMessage("Select destination: ");
-        airportMenuHandler.processMenuOption(); // Arrival
+        airportMenuHandler.show(); // Arrival
 
         airports.add(chosenAirports.get(0)); // Add back selected airports
         airports.add(chosenAirports.get(1));
