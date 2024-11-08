@@ -8,7 +8,7 @@ import entities.annotations.Range;
 import entities.annotations.Size;
 
 @JsonPropertyOrder({"id", "name"})
-public class Passenger {
+public class Passenger implements Entity {
     @Column(name = "id", autoIncrement = true)
     @Range(min = 101)
     private int id;
@@ -30,6 +30,11 @@ public class Passenger {
         this.lastName = lastName;
     }
 
+    public Passenger(String name, String lastName) {
+        this.name = name;
+        this.lastName = lastName;
+    }
+
     @JsonGetter("id")
     public int getId() {
         return id;
@@ -42,12 +47,12 @@ public class Passenger {
 
     @JsonGetter("name")
     public String getName() {
-        return lastName;
+        return name;
     }
 
     @JsonSetter("name")
-    public void setName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @JsonGetter("lastName")
@@ -56,7 +61,16 @@ public class Passenger {
     }
 
     @JsonSetter("name")
-    public void setLastName(String name) {
-        this.name = name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getFullName() {
+        return this.name + " " + this.lastName;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("ID%d - %s %s", this.id, this.name, this.lastName);
     }
 }

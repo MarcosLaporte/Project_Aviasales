@@ -21,5 +21,7 @@
         <mapper resource="mappers/airlineMapper.xml"/>
         <mapper resource="mappers/airportMapper.xml"/>
         <mapper resource="mappers/routeMapper.xml"/>
+        <mapper resource="mappers/passengerMapper.xml"/>
+        <mapper resource="mappers/tripMapper.xml"/>
     </mappers>
 </configuration>

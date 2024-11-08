@@ -48,4 +48,9 @@ public class Airport implements Entity {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return String.format("ID%d - %s", this.id, this.name);
+    }
 }
