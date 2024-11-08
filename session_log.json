@@ -1,0 +1,17 @@
+[ {
+  "start_time" : "2024-11-07 23:57:14",
+  "route_details" : {
+    "shortest_distance_km" : 15500.0,
+    "cheapest_price" : 1220.0,
+    "shortest_route" : "JFK International Airport -> Los Angeles International Airport -> Tokyo Airport",
+    "cheapest_route" : "JFK International Airport -> Cancun Airport -> Ezeiza Airport -> Tokyo Airport"
+  }
+}, {
+  "start_time" : "2024-11-07 23:58:52",
+  "route_details" : {
+    "shortest_distance_km" : 14500.0,
+    "cheapest_price" : 920.0,
+    "shortest_route" : "Cancun Airport -> Ezeiza Airport -> Tokyo Airport",
+    "cheapest_route" : "Cancun Airport -> Ezeiza Airport -> Tokyo Airport"
+  }
+} ]
