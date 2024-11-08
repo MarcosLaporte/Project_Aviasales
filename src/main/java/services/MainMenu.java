@@ -1,11 +1,6 @@
 package services;
 
-import entities.Airline;
 import entities.Airport;
-import entities.Entity;
-import entities.Route;
-import org.apache.logging.log4j.Level;
-import utils.EntityReflection;
 import utils.LoggerService;
 import view.ListMenuHandler;
 import view.SelectionMenuView;
@@ -16,15 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 public class MainMenu {
-    private enum Menu {
-        NEW_AIRLINE, NEW_AIRPORT, NEW_ROUTE, NEW_TRIP;
-
-        @Override
-        public String toString() {
-            return super.toString().replace('_', ' ');
-        }
-    }
-
     public static void start() {
         SelectionMenuView<Menu> view = new SelectionMenuView<>(List.of(Menu.values()))
                 .setElementConsumer((Menu e, Integer index) -> System.out.printf("%d. %s\n", index, e))
@@ -33,28 +19,13 @@ public class MainMenu {
         ListMenuHandler<Menu> mainMenu = new ListMenuHandler<>(view)
                 .setLoop(true)
                 .setOptionConsumer((e, _) -> {
-                    switch (e) {
-                        case NEW_AIRLINE -> createEntity(Airline.class);
-                        case NEW_AIRPORT -> createEntity(Airport.class);
-                        case NEW_ROUTE -> createEntity(Route.class);
-                        case NEW_TRIP -> handleNewTrip();
-                    }
+                    if (e == Menu.NEW_TRIP)
+                        handleNewTrip();
+                    else
+                        CrudMenu.handleCrudOperation(e);
                 });
 
         mainMenu.processMenuOption();
-    }
-
-    private static <T extends Entity> void createEntity(Class<T> clazz) {
-        EntityReflection<T> rs = new EntityReflection<>(clazz);
-
-        try (MyBatis<T> dao = new MyBatis<>(clazz)) {
-            if (dao.create(rs.readNewInstance(false)) > 0)
-                LoggerService.println(clazz.getSimpleName() + " created!");
-            else
-                LoggerService.println("No " + clazz.getSimpleName() + " was created.");
-        } catch (Exception e) {
-            LoggerService.log(Level.ERROR, e.getMessage() != null ? e.getMessage() : e.getClass().toString());
-        }
     }
 
     private static void handleNewTrip() {
