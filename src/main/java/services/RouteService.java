@@ -117,19 +117,28 @@ public abstract class RouteService {
      * Prints the shortest and cheapest routes between two airports using pre-calculated distances and prices.
      * Calculates and displays the path, total distance, and price if routes exist between the airports.
      *
-     * @param startIndex The index of the departure airport in the list.
-     * @param endIndex   The index of the destination airport in the list.
-     * @param airports   The list of available airports, each represented by an Airport object.
+     * @param start    The departure airport to look for in the list.
+     * @param end      The destination airport to look for in the list.
+     * @param airports The list of available airports, each represented by an Airport object.
      */
-    public static void printRouteBetweenAirports(int startIndex, int endIndex, List<Airport> airports) {
-        if (startIndex == endIndex) {
-            LoggerService.consoleLog(Level.WARN, "Same airport selected as departure and destination.");
-            return;
-        }
+    public static void printRouteBetweenAirports(Airport start, Airport end, List<Airport> airports) {
+        List<Route> routes;
+        final int startIndex;
+        final int endIndex;
+        try {
+            if (start == end)
+                throw new Exception("Same airport selected as departure and destination.");
 
-        List<Route> routes = getRoutes();
-        if (routes.isEmpty()) {
-            LoggerService.log(Level.ERROR, "No routes found in database.");
+            startIndex = airports.indexOf(start);
+            endIndex = airports.indexOf(end);
+            if (startIndex == -1 || endIndex == -1)
+                throw new Exception("The airport list does not contain specified airports.");
+
+            routes = getRoutes();
+            if (routes.isEmpty())
+                throw new Exception("No routes found in database.");
+        } catch (Exception e) {
+            LoggerService.log(Level.ERROR, e.getMessage());
             return;
         }
 

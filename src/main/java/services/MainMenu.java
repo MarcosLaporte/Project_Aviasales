@@ -66,13 +66,11 @@ public class MainMenu {
                     .setMenuMessage("Select a departure airport: ");
 
             final List<Airport> chosenAirports = new ArrayList<>();
-            final List<Integer> airportsIndex = new ArrayList<>();
 
             ListMenuHandler<Airport> airportMenuHandler = new ListMenuHandler<>(airportsView)
-                    .setOptionConsumer((a, index) -> {
+                    .setOptionConsumer((a, _) -> {
                         chosenAirports.add(a);
-                        airports.remove(index - 1); // Remove selected airport to avoid duplicate selection
-                        airportsIndex.add(index - 1);
+                        airports.remove(a); // Remove selected airport to avoid duplicate selection
                     });
 
             airportMenuHandler.processMenuOption(); // Departure
@@ -82,13 +80,13 @@ public class MainMenu {
                     .setMenuMessage("Select destination: ");
             airportMenuHandler.processMenuOption(); // Arrival
 
-            airports.add(airportsIndex.getFirst(), chosenAirports.getFirst()); // Put back selected airports
-            airports.add(airportsIndex.getLast(), chosenAirports.getLast()); // Put back selected airports
+            airports.add(chosenAirports.getFirst()); // Put back selected airports
+            airports.add(chosenAirports.getLast()); // Put back selected airports
             LoggerService.println(chosenAirports.getFirst() + " -> " + chosenAirports.get(1));
 
             RouteService.printRouteBetweenAirports(
-                    airportsIndex.getFirst(),
-                    airportsIndex.getLast(),
+                    chosenAirports.getFirst(),
+                    chosenAirports.getLast(),
                     airports
             );
         } catch (IOException e) {
