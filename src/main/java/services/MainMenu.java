@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class MainMenu {
     public static void start() {
@@ -42,7 +41,7 @@ public class MainMenu {
             Passenger currentPassenger = getCurrentPassenger();
             LoggerService.consoleLog(Level.INFO, "Welcome, " + currentPassenger.getFullName());
 
-            List<Airport> airports = airportDao.get(Map.of());
+            List<Airport> airports = airportDao.get();
             SelectionMenuView<Airport> airportsView = new SelectionMenuView<>(airports)
                     .setElementConsumer((Airport a, Integer index) -> System.out.printf("%d. %s\n", index, a))
                     .setMenuMessage("Select a departure airport: ");
@@ -113,7 +112,7 @@ public class MainMenu {
 
     private static Passenger getCurrentPassenger() {
         try (MyBatis<Passenger> passengerDao = new MyBatis<>(Passenger.class)) {
-            List<Passenger> passengers = passengerDao.get(Map.of());
+            List<Passenger> passengers = passengerDao.get();
 
             String[] passengerIds = passengers.stream()
                     .map(Passenger::getId)

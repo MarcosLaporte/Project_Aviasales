@@ -106,7 +106,7 @@ public abstract class RouteService {
 
     private static List<Route> getRoutes() {
         try (MyBatis<Route> routesDAO = new MyBatis<>(Route.class)) {
-            return routesDAO.get(Map.of());
+            return routesDAO.get();
         } catch (Exception e) {
             return List.of();
         }

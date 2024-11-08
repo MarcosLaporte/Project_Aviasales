@@ -8,6 +8,10 @@ import java.util.Map;
 public interface IDao<T> {
     List<T> get(Map<String, Object> fieldValueFilters);
 
+    default List<T> get() {
+        return get(Map.of());
+    }
+
     int create(T t);
 
     int update(
